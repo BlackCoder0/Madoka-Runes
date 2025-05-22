@@ -35,14 +35,19 @@ export default {
     },
     async doOCR() {
       if (!this.file) return;
-      // TODO: 调用后端OCR API，传递图片并获取识别结果
-      // 示例：
-      // const formData = new FormData();
-      // formData.append('file', this.file);
-      // const res = await fetch('/api/ocr', { method: 'POST', body: formData });
-      // const data = await res.json();
-      // this.ocrResult = data.text;
-      this.ocrResult = '（此处展示后端返回的识别结果）';
+      const formData = new FormData();
+      formData.append('file', this.file);
+      try {
+        const res = await fetch('http://127.0.0.1:5000/api/ocr', { method: 'POST', body: formData });
+        if (!res.ok) {
+          this.ocrResult = `请求失败，状态码：${res.status}`;
+          return;
+        }
+        const data = await res.json();
+        this.ocrResult = data.text;
+      } catch (err) {
+        this.ocrResult = '请求或解析响应时出错：' + err;
+      }
     }
   }
 }
