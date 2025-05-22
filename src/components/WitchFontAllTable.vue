@@ -3,25 +3,29 @@
     <div class="witch-font-all-table">
       <h2>魔女文字字符集总览</h2>
       <div class="table-sections">
-        <div v-for="(section, sectionIndex) in fontMap[0].sections" :key="sectionIndex">
-          <table class="wikitable">
-            <thead>
-              <tr>
-                <th rowspan="2">字体/字符</th>
-                <th v-for="char in section.header" :key="char">{{ char }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="font in fontMap" :key="font.key">
-                <th>{{ font.label }}</th>
-                <td v-for="(char, charIdx) in section.header" :key="char" :style="getCellStyle(font, char, section.characters)">
-                  {{ getCellDisplay(font, char, section.characters) }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div v-for="(section, sectionIdx) in fontMap[0].sections" :key="sectionIdx">
+            <table class="wikitable">
+                <thead>
+                <tr>
+                    <th rowspan="2">字体/字符</th>
+                    <th v-for="char in section.header" :key="char">{{ char }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="font in fontMap" :key="font.key">
+                    <th>{{ font.label }}</th>
+                    <td
+                    v-for="(char, charIdx) in section.header"
+                    :key="char"
+                    :style="getCellStyle(font, char)"
+                    >
+                    {{ getCellDisplay(font, charIdx, font.sections[sectionIdx]) }}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-      </div>
+    </div>
     </div>
   </div>
 </template>
@@ -44,8 +48,8 @@ const fontMap = [
     font: 'MadokaRunes',
     key: 'modern',
     sections: [
-      { header: ['A','B','C','D','E','F','G','H','I','J'], characters: 'ABCDEFGHIJ' },
-      { header: ['K','L','M','N','O','P','Q','R','S','T'], characters: 'KLMNOPQRST' },
+      { header: ['A','B','C','D','E','F','G','H','I','J'], characters: 'ABCDE/GHIJ' },
+      { header: ['K','L','M','N','O','P','Q','R','S','T'], characters: 'KLMNOP/RST' },
       { header: ['U','V','W','X','Y','Z','Ä','Ö','Ü','ß'], characters: 'U/////ÄÖÜß' },
       { header: ['0','1','2','3','4','5','6','7','8','9'], characters: '0123456789' }
     ]
@@ -55,9 +59,9 @@ const fontMap = [
     font: 'MadokaMusical',
     key: 'musical',
     sections: [
-      { header: ['A','B','C','D','E','F','G','H','I','J'], characters: 'ABCDEFGHIJ' },
-      { header: ['K','L','M','N','O','P','/','R','S','T'], characters: 'ABCDEFGHIKLMNOPRST' },
-      { header: ['U','V','W','X','Y','Z','Ä','Ö','Ü','ß'], characters: 'UV/YZ/////' },
+      { header: ['A','B','C','D','E','F','G','H','I','J'], characters: 'ABCDEFGHI/' },
+      { header: ['K','L','M','N','O','P','Q','R','S','T'], characters: 'KLMNOP/RST' },
+      { header: ['U','V','W','X','Y','Z','Ä','Ö','Ü','ß'], characters: 'UV//YZ////' },
       { header: ['0','1','2','3','4','5','6','7','8','9'], characters: '//////////' }
     ]
   },
@@ -68,7 +72,7 @@ const fontMap = [
     sections: [
       { header: ['A','B','C','D','E','F','G','H','I','J'], characters: 'ABCDEFGHIJ' },
       { header: ['K','L','M','N','O','P','Q','R','S','T'], characters: 'KLMNOPQRST' },
-      { header: ['U','V','W','X','Y','Z','Ä','Ö','Ü','ß'], characters: 'UVWYZÄÖÜß' },
+      { header: ['U','V','W','X','Y','Z','Ä','Ö','Ü','ß'], characters: 'UVWXYZÄÖÜß' },
       { header: ['0','1','2','3','4','5','6','7','8','9'], characters: '0123456789' }
     ]
   }
@@ -82,17 +86,18 @@ export default {
     };
   },
   methods: {
-    getCellDisplay(font, char, characters) {
-      // 只要该字符在当前字体的支持范围内才显示，否则严格显示为“/”
-      if (!characters.includes(char.toUpperCase()) && !characters.includes(char)) {
+    getCellDisplay(font, charIdx, section) {
+    const char = section.header[charIdx];
+    const displayChar = section.characters?.[charIdx];
+
+    if (!displayChar || displayChar === ' ') {
         return '/';
-      }
-      if (font.key === 'modern') {
-        return char.toLowerCase();
-      } else if (font.key === 'ancient') {
-        return char.toUpperCase();
-      }
-      return char;
+    }
+
+    // 格式化逻辑
+    if (font.key === 'modern') return displayChar.toLowerCase();
+    if (font.key === 'ancient') return displayChar.toUpperCase();
+    return displayChar;
     },
     getCellStyle(font, char, characters) {
       return {
@@ -199,3 +204,4 @@ h2 {
 }
 </style>
   
+
