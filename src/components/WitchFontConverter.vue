@@ -4,13 +4,21 @@
     <div class="input-area">
       <label>选择字体：</label>
       <select v-model="selectedFont">
-        <option v-for="font in fonts" :key="font.cssName" :value="font.cssName">{{ font.name }}</option>
+        <option v-for="font in fonts" :key="font.cssName + font.name" :value="font">
+          {{ font.name }}
+        </option>
       </select>
       <textarea v-model="inputText" placeholder="请输入英文/数字/德语文字" rows="3"></textarea>
       <button @click="downloadImage">下载截图</button>
     </div>
     <div class="output-area" ref="outputArea">
-      <span :style="{fontFamily: selectedFont, fontSize: '2.2rem', background: 'transparent', color: 'black' }">{{ inputText }}</span>
+      <span :style="{fontFamily: selectedFont.cssName, fontSize: '2.2rem', background: 'transparent', color: 'black' }" :key="selectedFont.cssName">
+        {{
+          selectedFont.name === '古代体' ? inputText.toUpperCase() :
+          selectedFont.name === '现代体' ? inputText.toLowerCase() :
+          inputText
+        }}
+      </span>
     </div>
   </div>
 </template>
@@ -22,14 +30,14 @@ export default {
   data() {
     return {
       inputText: '',
-      selectedFont: 'MadokaRunes',
+      selectedFont: { name: '古代体', cssName: 'MadokaRunes' },
       fonts: [
-        { name: 'MadokaLetters', cssName: 'MadokaLetters' },
-        { name: 'MadokaMusical', cssName: 'MadokaMusical' },
-        { name: 'MadokaRunes', cssName: 'MadokaRunes' },
-        { name: 'MadokaRunes-2.0', cssName: 'MadokaRunes-2.0' },
-        { name: 'nkf10_magicum_comicum_crassum', cssName: 'nkf10_magicum_comicum_crassum' },
-        { name: 'nkf11_magicum_texturae', cssName: 'nkf11_magicum_texturae' }
+        { name: '古代体', cssName: 'MadokaRunes' },
+        { name: '现代体', cssName: 'MadokaRunes' },
+        { name: '音乐体', cssName: 'MadokaMusical' },
+        { name: '哥特体', cssName: 'nkf11_magicum_texturae' },
+        { name: '魔女文风格', cssName: 'MadokaLetters' },
+        { name: '圆体', cssName: 'nkf10_magicum_comicum_crassum' },
       ]
     }
   },
