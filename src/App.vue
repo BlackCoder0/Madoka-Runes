@@ -1,9 +1,16 @@
 <template>
   <div class="app-layout">
     <nav class="main-nav">
-      <router-link to="/">魔女文</router-link>
-      <router-link to="/convert">转换工具</router-link>
-      <router-link to="/ocr">OCR识别</router-link>
+      <div class="nav-logo-area">
+        <router-link to="/" class="logo-link">
+          <img src="/vite.svg" alt="Logo" class="nav-logo" />
+        </router-link>
+      </div>
+      <div class="nav-links">
+        <router-link to="/" exact>魔女文</router-link>
+        <router-link to="/convert">转换工具</router-link>
+        <router-link to="/ocr">OCR识别</router-link>
+      </div>
     </nav>
     <div class="main-content">
       <router-view />
@@ -50,15 +57,40 @@ export default {
 }
 .main-nav {
   display: flex;
-  gap: 1.2rem;
+  align-items: center;
+  justify-content: space-between;
+  width: 100vw;
+  min-width: 0;
+  gap: 0;
   background: linear-gradient(90deg, #2d133b 0%, #4e2a5a 100%);
   border-radius: 0 0 12px 12px;
-  padding: 0.7rem 1.2rem;
+  padding: 0.7rem 2.2rem 0.7rem 1.2rem;
   box-shadow: 0 2px 12px #1a0e23;
   border: 1.5px solid #a084c7;
   position: sticky;
   top: 0;
   z-index: 10;
+}
+.nav-logo-area {
+  display: flex;
+  align-items: center;
+  min-width: 120px;
+  margin-right: 2.5rem;
+}
+.nav-logo {
+  height: 2.2rem;
+  width: auto;
+  vertical-align: middle;
+  cursor: pointer;
+}
+.logo-link {
+  display: flex;
+  align-items: center;
+}
+.nav-links {
+  display: flex;
+  gap: 1.2rem;
+  flex: 1 1 auto;
 }
 .main-nav a {
   color: #eeb7e1;
@@ -69,12 +101,27 @@ export default {
   transition: color 0.2s, background 0.2s;
   padding: 0.2rem 0.7rem;
   border-radius: 6px;
+  margin: 0 0.1rem;
 }
-.main-nav a.router-link-exact-active {
+.main-nav a.router-link-exact-active, .main-nav a.router-link-active {
   color: #fff;
   background: linear-gradient(90deg, #a084c7 0%, #eeb7e1 100%);
   border-radius: 6px;
   box-shadow: 0 0 8px #a084c7;
+}
+@media (max-width: 900px) {
+  .main-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  }
+  .nav-logo-area {
+    margin-right: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+  .nav-links {
+    gap: 0.7rem;
+  }
 }
 .main-content {
   flex: 1 1 auto;
