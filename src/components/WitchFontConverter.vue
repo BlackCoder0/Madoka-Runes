@@ -55,6 +55,13 @@ export default {
   border-radius: 10px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px #e0bfe6;
+  width: 100%;
+  max-width: 60vw;
+  @media (max-width: 768px) {
+    max-width: 90vw;
+  }
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 .input-area {
   display: flex;
