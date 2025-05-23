@@ -65,6 +65,58 @@ button:focus-visible {
   text-align: center;
 }
 
+
+/*看板娘用css 本功能来自公主连结BWIKI*/
+.animechara {
+  display: block;
+  width: 130px;
+  height: 190px;
+  position: fixed;
+  bottom: 0px;
+  left: 10px;
+  z-index: 9999;
+}
+
+#message {
+  position: absolute;
+  border-radius: 6px;
+  box-shadow: 0 0 1px #eeeeee;
+  border: 1px;
+  border-color: pink;
+  background: rgba(255, 170, 170, 0.555);
+  width: auto !important;
+  color: white;
+  outline: none;
+  text-align: center;
+  font-size: small;
+  padding: 5px;
+  line-height: 170%;
+  min-height: 1em;
+  text-align: left;
+  z-index: 10000;
+  bottom: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+#message::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgba(255, 170, 170, 0.555) transparent transparent transparent;
+}
+/*看板娘相关*/
+.chara {
+  width: 130px;
+  height: 190px;
+  background-size: contain;
+  position: relative;
+  background-repeat: no-repeat;
+}
+
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
