@@ -59,8 +59,8 @@ export default {
   max-width: 60vw;
   @media (max-width: 768px) {
     max-width: 90vw;
+    margin-top: 45%; 
   }
-  margin: 0 auto;
   box-sizing: border-box;
 }
 .input-area {

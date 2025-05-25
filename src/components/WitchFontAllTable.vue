@@ -175,6 +175,9 @@ h2 {
   margin-bottom: 1.2rem;
 }
 @media (max-width: 900px) {
+  .witch-font-all-table-container {
+    margin-top: 30%;
+  }
   .wikitable {
     font-size: 0.85rem;
   }
@@ -189,6 +192,9 @@ h2 {
   }
 }
 @media (max-width: 600px) {
+  .witch-font-all-table-container {
+    margin-top: 30%;
+  }
   .wikitable {
     font-size: 0.65rem;
   }
