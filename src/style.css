@@ -2,40 +2,43 @@
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
+  
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  background-image: url('../assets/555.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-a {
+  }
+  
+  a {
   font-weight: 500;
   color: #646cff;
   text-decoration: inherit;
-}
-a:hover {
+  }
+  a:hover {
   color: #535bf2;
-}
-
-body {
+  }
+  
+  body {
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-}
-
-h1 {
+  }
+  
+  h1 {
   font-size: 3.2em;
   line-height: 1.1;
-}
-
-button {
+  }
+  
+  button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -45,29 +48,29 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
-}
-button:hover {
+  }
+  button:hover {
   border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
+  }
+  button:focus,
+  button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
-
-.card {
+  }
+  
+  .card {
   padding: 2em;
-}
-
-#app {
+  }
+  
+  #app {
   max-width: 80vw;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-}
-
-
-/*看板娘用css 本功能来自公主连结BWIKI*/
-.animechara {
+  }
+  
+  
+  /*看板娘用css 本功能来自公主连结BWIKI*/
+  .animechara {
   display: block;
   width: 130px;
   height: 190px;
@@ -75,9 +78,9 @@ button:focus-visible {
   bottom: 0px;
   left: 10px;
   z-index: 9999;
-}
-
-#message {
+  }
+  
+  #message {
   position: absolute;
   border-radius: 6px;
   box-shadow: 0 0 1px #eeeeee;
@@ -95,9 +98,10 @@ button:focus-visible {
   text-align: left;
   z-index: 10000;
   bottom: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-}
-#message::after {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  }
+  #message::after {
   content: "";
   position: absolute;
   top: 100%;
@@ -106,26 +110,26 @@ button:focus-visible {
   border-width: 5px;
   border-style: solid;
   border-color: rgba(255, 170, 170, 0.555) transparent transparent transparent;
-}
-/*看板娘相关*/
-.chara {
+  }
+  /*看板娘相关*/
+  .chara {
   width: 130px;
   height: 190px;
   background-size: contain;
   position: relative;
   background-repeat: no-repeat;
-}
-
-
-@media (prefers-color-scheme: light) {
+  }
+  
+  
+  @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+  color: #213547;
+  background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+  color: #747bff;
   }
   button {
-    background-color: #f9f9f9;
+  background-color: #f9f9f9;
   }
-}
+  }
