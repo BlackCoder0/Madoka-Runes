@@ -137,7 +137,7 @@
 
 <style scoped>
   body {
-    background-image: url('../assets/555.png');
+    background-image: url('/assets/555.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
