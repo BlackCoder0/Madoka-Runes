@@ -13,6 +13,7 @@
             <router-link to="/" exact>魔女文</router-link>
             <router-link to="/convert">转换工具</router-link>
             <router-link to="/map">见泷原</router-link>
+<router-link to="/about">关于</router-link>
           </div>
         </div>
       </nav>

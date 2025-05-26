@@ -32,7 +32,7 @@
           { name: '现代体', cssName: 'MadokaRunes' },
           { name: '音乐体', cssName: 'MadokaMusical' },
           { name: '哥特体', cssName: 'nkf11_magicum_texturae' },
-          { name: '魔女文风格', cssName: 'MadokaLetters' },
+          { name: '黑花体', cssName: 'MadokaLetters' },
           { name: '圆体', cssName: 'nkf10_magicum_comicum_crassum' },
         ]
       }
@@ -54,6 +54,7 @@
 <style scoped>
   .witch-font-converter {
     margin-bottom: 2rem;
+    margin-top: 5rem;
     background: #2d133b;
     color: black;
     border-radius: 10px;
@@ -61,10 +62,12 @@
     box-shadow: 0 2px 8px #dcfaf5;
     width: 100%;
     max-width: 60vw;
+    min-width: 500px;
 
     @media (max-width: 768px) {
       max-width: 90vw;
       margin-top: 45%;
+      min-width: 30vw;
     }
 
     box-sizing: border-box;

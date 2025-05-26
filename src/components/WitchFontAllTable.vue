@@ -1,6 +1,18 @@
 <template>
-  <div class="witch-font-all-table-container">
-    <div class="witch-font-all-table">
+  <div class="witch-font-all-table">
+
+    <div class="witch-font-all-table-container">
+      <div class="witch-font-info">
+        <p><strong>魔女文字</strong>（<strong>Madoka
+            Runes</strong>，又称<strong>犬咖喱文</strong>）是指出现于SHAFT制作的动画《魔法少女小圆》中魔女结界、魔法少女戒指等处的文字，由剧团犬咖喱设计。</p>
+
+        <p>魔女文字的字符与拉丁字母（包括德文字母，比英文字母多出4个）和阿拉伯数字之间存在一一对应。</p>
+
+        <p>剧中出现的魔女文字大多用来拼写德文和英文，也有用来拼写日语罗马字、意大利语、拉丁语等其他语言的。</p>
+
+        <p>魔女文字的破译是圆粉们的一大乐趣。不过在剧情设定中魔女文字实际上是无法被解读的，因此剧中人物是以"oo的魔女"来称呼魔女们。</p>
+
+      </div>
       <h2>魔女文字字符集总览</h2>
       <div class="table-sections">
         <div v-for="(section, sectionIdx) in fontMap[0].sections" :key="sectionIdx">
@@ -22,6 +34,24 @@
           </table>
         </div>
       </div>
+    </div>
+    <div class="witch-font-info">
+      <h2>字体</h2>
+        <p>魔女文字在剧中出现的字体主要有三种（注意字体名称并非官方命名，只是爱好者取的名字）：</p>
+        <ol>
+          <li><strong>古代体</strong>（Archaic），字形较为复杂，多有棱角和粗细变化，在原作中最常见。（在字体文件中，原字体大写字母对应该风格）</li>
+          <li><strong>现代体</strong>（Modern），字形较为简略流畅。（在字体文件中，原字体小写字母对应该风格）</li>
+          <li><strong>音乐体</strong>（Musical），许多笔画类似乐谱和音符，主要出现于人鱼魔女的结界中，在其他地方也有零散出现。</li>
+        </ol>
+      <p>本站目前使用<a href="https://tieba.baidu.com/home/main?id=tb.1.df458a65.pThF7AVtjtVtywlkzrvvHg?t=1586141278&fr=pb" target="_blank">somlibaria</a>制作的<a href="https://tieba.baidu.com/p/4525882479?pn=5#" target="_blank">魔女文字体资源</a>，其中包括：</p>
+      <ul>
+        <li>MadokaRunes Archaic（古代体）</li>
+        <li>MadokaRunes Modern（现代体）</li>
+        <li>MadokaMusical（音乐体）</li>
+        <li>MadokaLetters（哥特体）</li>
+        <li>Magicum Texturae（黑花体）</li>
+        <li>Magicum Comicum Crassum（圆体）</li>
+      </ul>
     </div>
   </div>
 </template>
@@ -111,6 +141,17 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
+  }
+
+  .witch-font-info {
+    text-align: left;
+    color: #e9d6f7;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 1rem;
+    background: #23162e;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
   }
 
   .witch-font-all-table-container {
@@ -214,6 +255,13 @@
   }
 
   @media (max-width: 600px) {
+    .witch-font-info {
+      font-size: 0.75rem;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      padding: 0.5rem 1rem;
+    }
+
     .witch-font-all-table-container {
       margin-top: 30%;
     }
