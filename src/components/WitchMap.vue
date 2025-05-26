@@ -47,7 +47,7 @@
       <label>选择集数：</label>
       <select v-model="currentEpisode" @change="changeEpisode">
         <option :value="0">请选择集数</option>
-        <option v-for="ep in episodes.filter(e => e !== 0)" :key="ep" :value="ep">第{{ ep }} 集</option>
+        <option v-for="ep in episodes.filter(e => e !== 0)" :key="ep" :value="ep">第{{ ep }}集</option>
       </select>
       <button v-if="currentEpisode !== 0" @click="replayAnimation" class="replay-btn">重播</button>
     </div>
