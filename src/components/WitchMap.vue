@@ -1,37 +1,59 @@
 <template>
   <div class="map-layout">
-    <div class="map-container">
+    <div class="map-container" ref="mapContainer">
       <img src="/map/Madoa_PSP_World_Map.jpg" alt="World Map" class="world-map" />
+      <canvas ref="canvas" class="map-canvas"></canvas>
+
       <div class="points-container">
         <div
-  v-for="point in points"
-  :key="point.id"
-  class="point-wrapper"
-  :style="{ top: point.y + '%', left: point.x + '%' }"
-  @mouseenter="hoveredPoint = point"
-  @mouseleave="hoveredPoint = null"
-  @click="showPointInfo(point)"
->
-  <img v-if="point.icon" :src="point.icon" :alt="point.name" class="point-icon" />
-  <div v-else class="point"></div>
-  <div class="name-label">{{ point.name }}</div>
+          v-for="point in points"
+          :key="point.id"
+          class="point-wrapper"
+          :style="{ top: point.y + '%', left: point.x + '%' }"
+          @mouseenter="hoveredPoint = point"
+          @mouseleave="hoveredPoint = null"
+          @click="showPointInfo(point)"
+        >
+          <img v-if="point.icon" :src="point.icon" :alt="point.name" class="point-icon" />
+          <div v-else class="point"></div>
+          <div class="name-label">{{ point.name }}</div>
 
-  <!-- 悬浮信息框（仅电脑端） -->
-  <div v-if="hoveredPoint === point && !isMobile && (hoveredPoint.des || hoveredPoint.info)" class="hover-tooltip">
-    <table>
-      <tr v-if="point.des"><th>简要</th><td>{{ point.des }}</td></tr>
-      <tr v-if="point.info"><th>说明</th><td v-html="formatInfo(point.info)"></td></tr>
-    </table>
-  </div> </div>
+          <div
+            v-if="hoveredPoint === point && !isMobile && (hoveredPoint.des || hoveredPoint.info)"
+            class="hover-tooltip"
+          >
+            <table>
+              <tr v-if="point.des"><th>简要</th><td>{{ point.des }}</td></tr>
+              <tr v-if="point.info"><th>说明</th><td v-html="formatInfo(point.info)"></td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- 路径上的角色名牌 -->
+        <div
+          v-for="tag in visiblePathTags"
+          :key="tag.key"
+          class="path-tag"
+          :style="{ top: tag.top + '%', left: tag.left + '%', transform: 'translate(-50%, -50%)', backgroundColor: tag.color + 'cc' }"
+        >
+          {{ tag.name }}
+        </div>
       </div>
     </div>
 
     <div v-if="selectedPoint && isMobile" class="info-panel">
-  <h3>{{ selectedPoint.name }}</h3>
-  <div v-if="selectedPoint.des" v-html="formatInfo(selectedPoint.des)" class="info-content"></div>
-  <div v-if="selectedPoint.info" v-html="formatInfo(selectedPoint.info)" class="info-content"></div>
-  <button @click="hidePointInfo" class="close-btn">关闭</button>
-</div>
+      <h3>{{ selectedPoint.name }}</h3>
+      <div v-if="selectedPoint.des" v-html="formatInfo(selectedPoint.des)" class="info-content"></div>
+      <div v-if="selectedPoint.info" v-html="formatInfo(selectedPoint.info)" class="info-content"></div>
+      <button @click="hidePointInfo" class="close-btn">关闭</button>
+    </div>
+
+    <div class="episode-selector">
+      <label>选择集数：</label>
+      <select v-model="currentEpisode" @change="changeEpisode">
+        <option v-for="ep in episodes" :key="ep" :value="ep">{{ ep }} 集</option>
+      </select>
+    </div>
   </div>
 </template>
 
@@ -57,18 +79,136 @@ export default {
         { id: 14, x: 78, y: 33, name: '河川敷',des:'沿着见泷原河河堤而筑的河川敷，附近有游乐场',info: '小说版确定为姬名河<br>TV第五集public\\map\\Madoka-head.png public\\map\\Sayaka-head.png对话', icon: '/map/风力发电站.svg'},
         { id: 15, x: 95, y: 63, name: '教会',des:'见泷原郊外的教会',info: '※public\\map\\Kyoko-head.png及其家人曾经所在的教会<br>TV第七集public\\map\\Kyoko-head.png public\\map\\Sayaka-head.png谈话', icon: '/map/教堂.svg'},
         ],
-    selectedPoint: null,
-    hoveredPoint: null,
-    isMobile: window.innerWidth <= 700
+      // 模拟动画集数，有多条路径，每条路径是点位id的数组
+      episodes: [1, 2, 3],
+      currentEpisode: 1,
+      pathsByEpisode: {
+        1: [
+          {
+            id: "path1",
+            points: [1,13,2,7,4], // 点位id顺序
+            tags: [
+              { name: "鹿目圆", position: 0.1 }, // 0.3表示路径中点的30%位置
+              { name: "鹿目圆/沙耶香/仁美", position: 0.3}, 
+              { name: "鹿目圆/沙耶香", position: 0.6}, 
+              { name: "鹿目圆/沙耶香/巴麻美", position: 0.9}, 
+            ],
+            color: '#d81b60' // 添加路径颜色
+          },
+          {
+            id: "path2",
+            points: [6, 2,7],
+            tags: [{ name: "晓美焰", position: 0.3 }],
+            color: '#1976d2' // 添加路径颜色
+          },
+        ],
+        2: [
+          {
+            id: "path3",
+            points: [3, 1],
+            tags: [{ name: "美树沙耶香", position: 0.5 }],
+            color: '#b85c00' // 添加路径颜色
+          },
+        ],
+        3: [],
+      },
+      hoveredPoint: null,
+      selectedPoint: null,
+      isMobile: window.innerWidth <= 700,
+      canvasContext: null,
+      animationFrameId: null,
+      animationProgress: 0,
+      animationDuration: 1000,
+    };
+  },
+  computed: {
+    visiblePaths() {
+      return this.pathsByEpisode[this.currentEpisode] || [];
+    },
+    // 计算当前显示路径上的名牌位置信息
+    visiblePathTags() {
+      if (!this.visiblePaths.length) return [];
+      const result = [];
+      this.visiblePaths.forEach((path) => {
+        const pointCoords = path.points.map((pid) => {
+          const pt = this.points.find((p) => p.id === pid);
+          return pt ? { x: pt.x, y: pt.y } : null;
+        }).filter(Boolean);
+
+        const container = this.$refs.mapContainer;
+        if (!container) return [];
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        const pixelCoords = pointCoords.map(p => ({ x: (p.x / 100) * width, y: (p.y / 100) * height }));
+
+        path.tags.forEach((tag, tagIndex) => { // Add tagIndex here
+          const pos = tag.position; // 0~1
+          // Calculate tag position based on the full pixel path
+          const { x, y } = this.getPointOnPath(pixelCoords, pos);
+          // Convert pixel coordinates back to percentage for tag style
+          result.push({
+            key: 'path-' + path.id + '-tag-' + tagIndex, // Add unique key
+            name: tag.name,
+            left: (x / width) * 100,
+            top: (y / height) * 100,
+            color: path.color
+          });
+        });
+      });
+      return result;
+    },
+  },
+  mounted() {
+  this.checkMobile();
+  window.addEventListener("resize", this.onResize);
+
+  // 确保地图图片加载完成后再初始化
+  const mapImage = new Image();
+  mapImage.src = "/map/Madoa_PSP_World_Map.jpg";
+  mapImage.onload = () => {
+    this.$nextTick(() => {
+      this.resizeCanvas();
+      this.animationProgress = 1; // 直接显示完整路径
+      this.drawAnimatedPaths();
+      setTimeout(() => {
+        this.animationProgress = 0;
+        this.drawAnimatedPaths(); // 重置为动画初始状态
+      }, 50);
+    });
   };
 },
-mounted() {
-  window.addEventListener('resize', this.checkMobile);
+  beforeDestroy() {
+    window.removeEventListener("resize", this.onResize);
+    if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
+  },
+  methods: {
+    onResize() {
+      this.checkMobile();
+      this.resizeCanvas();
+      this.drawAnimatedPaths();
+    },
+    resizeCanvas() {
+  const canvas = this.$refs.canvas;
+  const container = this.$refs.mapContainer;
+  if (!container) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  const rect = container.getBoundingClientRect();
+  
+  // 设置实际像素尺寸
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  
+  // 设置显示尺寸
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
+  
+  this.canvasContext = canvas.getContext("2d");
+  this.canvasContext.scale(dpr, dpr);
 },
-beforeDestroy() {
-  window.removeEventListener('resize', this.checkMobile);
-},
-methods: {
+    checkMobile() {
+      this.isMobile = window.innerWidth <= 700;
+    },
   showPointInfo(point) {
   if (this.isMobile) {
     this.selectedPoint = point;
@@ -91,9 +231,135 @@ methods: {
       .replace(/(\*[^<]*)/g, '<span style="color:#1976d2;font-weight:bold;">$1</span>')
       .replace(/(【[^】]+】)/g, '<span style="color:#d81b60;">$1</span>');
   },
-  checkMobile() {
-    this.isMobile = window.innerWidth <= 700;
-  }
+  changeEpisode() {
+  if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
+  this.animationProgress = 0;
+  
+  // 强制重排保证容器尺寸正确
+  this.$refs.mapContainer.offsetHeight; 
+  
+  this.$nextTick(() => {
+    this.resizeCanvas();
+    setTimeout(() => {
+      this.drawAnimatedPaths();
+    }, 100);
+  });
+},
+    drawAnimatedPaths() {
+//       const container = this.$refs.mapContainer;
+// if (!container || container.clientWidth === 0) {
+//   return requestAnimationFrame(this.drawAnimatedPaths.bind(this));
+// };
+      const ctx = this.canvasContext;
+      if (!ctx) return;
+
+      const container = this.$refs.mapContainer;
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      ctx.clearRect(0, 0, width, height);
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      // ctx.strokeStyle = "#d81b60"; // 移除固定颜色
+      ctx.lineWidth = 3;
+
+      const paths = this.visiblePaths;
+      if (!paths.length) return;
+
+      const pixelPaths = paths.map(path => {
+        const pts = path.points
+          .map(pid => this.points.find(p => p.id === pid))
+          .filter(Boolean)
+          .map(p => ({ x: (p.x / 100) * width, y: (p.y / 100) * height }));
+        return { id: path.id, points: pts, color: path.color }; // 添加颜色信息
+      });
+
+      const totalLength = pixelPaths.reduce((sum, path) => {
+        return sum + this.calculatePathLength(path.points);
+      }, 0);
+
+      const drawLength = totalLength * this.animationProgress;
+
+      let lengthDrawn = 0;
+      pixelPaths.forEach(path => {
+        const pts = path.points;
+        ctx.beginPath();
+        ctx.strokeStyle = path.color; // 使用路径颜色
+
+        for (let i = 0; i < pts.length - 1; i++) {
+          const segStart = pts[i];
+          const segEnd = pts[i + 1];
+          const segLength = this.distance(segStart, segEnd);
+
+          if (lengthDrawn + segLength < drawLength) {
+            ctx.moveTo(segStart.x, segStart.y);
+            ctx.lineTo(segEnd.x, segEnd.y);
+            lengthDrawn += segLength;
+          } else {
+            const remain = drawLength - lengthDrawn;
+            const ratio = remain / segLength;
+            const drawX = segStart.x + (segEnd.x - segStart.x) * ratio;
+            const drawY = segStart.y + (segEnd.y - segStart.y) * ratio;
+            ctx.moveTo(segStart.x, segStart.y);
+            ctx.lineTo(drawX, drawY);
+            lengthDrawn = drawLength;
+            break;
+          }
+        }
+        ctx.stroke();
+      });
+
+
+      if (this.animationProgress < 1) {
+        this.animationProgress += 16 / this.animationDuration; // 假设16ms一帧
+        if (this.animationProgress > 1) this.animationProgress = 1;
+        this.animationFrameId = requestAnimationFrame(this.drawAnimatedPaths);
+      }
+    },
+    distance(p1, p2) {
+      return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
+    },
+    calculatePathLength(points) {
+      let length = 0;
+      for (let i = 0; i < points.length - 1; i++) {
+        length += this.distance(points[i], points[i + 1]);
+      }
+      return length;
+    },
+    // 根据路径上的多个点和位置(0~1)，计算对应的像素坐标
+    getPointOnPath(pixelPoints, position) {
+      if (!pixelPoints.length) return { x: 0, y: 0 };
+      if (position <= 0) return pixelPoints[0];
+      if (position >= 1) return pixelPoints[pixelPoints.length - 1];
+
+      let totalLength = 0;
+      const segLengths = [];
+      for (let i = 0; i < pixelPoints.length - 1; i++) {
+        const len = this.distance(pixelPoints[i], pixelPoints[i + 1]);
+        segLengths.push(len);
+        totalLength += len;
+      }
+
+      let targetLength = totalLength * position;
+
+      let currentLength = 0;
+      for (let i = 0; i < segLengths.length; i++) {
+        if (currentLength + segLengths[i] >= targetLength) {
+          const remain = targetLength - currentLength;
+          const ratio = remain / segLengths[i];
+          const start = pixelPoints[i];
+          const end = pixelPoints[i + 1];
+          const x = start.x + (end.x - start.x) * ratio;
+          const y = start.y + (end.y - start.y) * ratio;
+          return { x, y };
+        } else {
+          currentLength += segLengths[i];
+        }
+      }
+
+      // Should not reach here if position is between 0 and 1
+      return pixelPoints[pixelPoints.length - 1];
+    },
 }
 };
 </script>
@@ -121,7 +387,14 @@ methods: {
   height: 100%;
   object-fit: contain; /* 确保地图不裁切 */
 }
-
+.map-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
 .points-container {
   position: absolute;
   top: 0;
@@ -161,7 +434,18 @@ methods: {
   border-radius: 4px;
   white-space: nowrap;
 }
-
+.path-tag {
+  position: absolute;
+  padding: 0 6px;
+  background: #d81b60cc;
+  color: white;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  user-select: none;
+  pointer-events: none;
+  white-space: nowrap;
+}
 .info-panel {
   max-width: 300px;
   padding: 1rem;
@@ -198,6 +482,10 @@ methods: {
 }
 .close-btn:hover {
   background-color: #ad1457;
+}
+.episode-selector {
+  margin: 10px 0;
+  text-align: center;
 }
 .hover-tooltip {
   position: absolute;
@@ -266,6 +554,25 @@ methods: {
   }
   .map-container {
     margin-bottom: 40vh; /* 为信息面板留出空间 */
+  }
+  .path-tag { /* Add mobile styles for path tags */
+    font-size: 0.4rem; /* Smaller font size */
+    padding: 0 4px; /* Smaller padding */
+  }
+  .episode-selector {
+    position: fixed;
+    top: 60%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    z-index: 200;
+    background: rgba(30,10,40,0.92);
+    border-radius: 12px;
+    width: max-content;
+    min-width: 60vw;
+    max-width: 90vw;
+    padding: 6px 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
   }
 }
 </style>
