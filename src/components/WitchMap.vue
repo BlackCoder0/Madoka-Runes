@@ -41,21 +41,21 @@ export default {
   data() {
     return {
       points: [
-        { id: 1, x: 20, y: 53, name: '鹿目圆家', icon: '/map/家.png' },
-        { id: 2, x: 50, y: 75, name: '见泷原中学校', icon: '/map/学校.png' },
-        { id: 3, x: 35, y: 45, name: '见泷原入口',des:'见泷原入口，支持市民生活的交通要道',info: '◈人鱼的魔女Oktavia von Seckendorff\n※沙耶香变成魔女', icon: '/map/车站.png' },
-        { id: 4, x: 65, y: 63, name: '巴麻美家', icon: '/map/家.png' },
-        { id: 5, x: 47, y: 25, name: '见泷原市综合医院',info: '◈零食的魔女 CHARLOTTE\n※巴麻美牺牲\n※【天台】沙耶香变成魔法少女\n【天台】上条恭介康复后第一次拉琴', icon: '/map/医院.png' },
-        { id: 6, x: 30, y: 36, name: '晓美焰家', icon: '/map/家.png' },
-        { id: 7, x: 56, y: 46, name: '闹市',des:'聚集了学生和上班族的闹市',info: '◈玫瑰园的魔女GERTRUD\n◈【小巷】银之魔女GISELA\n【CD店】沙耶香常去的CD店\n【游戏中心】杏子常去的跳舞机\n【酒店】杏子居住所在', icon: '/map/闹市.png'},
-        { id: 8, x: 24, y: 76, name: '美树沙耶香家', icon: '/map/家.png' },
-        { id: 9, x: 94, y: 40, name: '工业地带',des:'各类工厂林立的工业地带',info: '◈影之魔女Elsa Maria\n◈【废工厂】箱之魔女H.N. ELLY (KIRSTEN)\n【废工厂】魔法少女沙耶香首战\n【军事基地】晓美焰获取军火', icon: '/map/工厂.png' },
-        { id: 10, x: 10, y: 46, name: '公园',des:'车站附近的公园，见泷原市民休息的场所',info: 'TV第三集晓美焰-巴麻美对持\n仁美对上条恭介告白\nTV第八集晓美焰-鹿目圆对话', icon: '/map/公园.png' },
-        { id: 11, x: 67, y: 31, name: '干线道路及步行天桥',info: '※众人首次得知灵魂宝石作用\n沙耶香-杏子战斗', icon: '/map/桥梁.png' },
-        { id: 12, x: 80, y: 50, name: '展望台',des:'一览见泷原风貌的展望台',info: 'TV第五集杏子观察点', icon: '/map/瞭望台.png' },
-        { id: 13, x: 33, y: 68, name: '中学的上学路', icon: '/map/道路.png'},
-        { id: 14, x: 78, y: 33, name: '河川敷',des:'沿着见泷原河河堤而筑的河川敷，附近有游乐场',info: '小说版确定为姬名河\nTV第五集鹿目圆-沙耶香对话', icon: '/map/风力发电站.svg'},
-        { id: 15, x: 95, y: 63, name: '教会',des:'见泷原郊外的教会',info: '※杏子及其家人曾经所在的教会\nTV第七集杏子-沙耶香谈话', icon: '/map/教堂.svg'},
+        { id: 1, x: 20, y: 53, name: '鹿目圆家', des:'鹿目圆和家人居住的家',icon: '/map/家.png' },
+        { id: 2, x: 50, y: 75, name: '见泷原中学校', des:'小圆等人就读的中学', icon: '/map/学校.png' },
+        { id: 3, x: 35, y: 45, name: '见泷原入口',des:'见泷原入口，支持市民生活的交通要道',info: '◈人鱼的魔女Oktavia von Seckendorff<br>※public\\map\\Sayaka-head.png变成魔女', icon: '/map/车站.png' },
+        { id: 4, x: 65, y: 63, name: '巴麻美家', des:'巴麻美居住的公寓',icon: '/map/家.png' },
+        { id: 5, x: 47, y: 25, name: '见泷原市综合医院',info: '◈零食的魔女 CHARLOTTE<br>※public\\map\\Mami-head.png牺牲<br>※【天台】public\\map\\Sayaka-head.png变成魔法少女<br>【天台】上条恭介康复后第一次拉琴', icon: '/map/医院.png' },
+        { id: 6, x: 30, y: 36, name: '晓美焰家',  des:'晓美焰居住的房间',icon: '/map/家.png' },
+        { id: 7, x: 56, y: 46, name: '闹市',des:'聚集了学生和上班族的闹市',info: '◈玫瑰园的魔女GERTRUD<br>◈【小巷】银之魔女GISELA<br>【CD店】public\\map\\Sayaka-head.png常去的CD店<br>【游戏中心】public\\map\\Kyoko-head.png常去的跳舞机<br>【酒店】public\\map\\Kyoko-head.png居住所在', icon: '/map/闹市.png'},
+        { id: 8, x: 24, y: 76, name: '美树沙耶香家', des:'美树沙耶香和家人居住的公寓', icon: '/map/家.png' },
+        { id: 9, x: 94, y: 40, name: '工业地带',des:'各类工厂林立的工业地带',info: '◈影之魔女Elsa Maria<br>◈【废工厂】箱之魔女H.N. ELLY (KIRSTEN)<br>【废工厂】魔法少女public\\map\\Sayaka-head.png首战<br>【军事基地】public\\map\\Homura-head.png获取军火', icon: '/map/工厂.png' },
+        { id: 10, x: 10, y: 46, name: '公园',des:'车站附近的公园，见泷原市民休息的场所',info: 'TV第三集public\\map\\Homura-head.pngpublic\\map\\Mami-head.png对持<br>仁美对上条恭介告白<br>TV第八集public\\map\\Homura-head.pngpublic\\map\\Madoka-head.png对话<br>public\\map\\Kyube-head.png被打成筛子', icon: '/map/公园.png' },
+        { id: 11, x: 67, y: 31, name: '干线道路及步行天桥',info: '※众人首次得知灵魂宝石作用<br>public\\map\\Sayaka-head.png public\\map\\Kyoko-head.png战斗', icon: '/map/桥梁.png' },
+        { id: 12, x: 80, y: 50, name: '展望台',des:'一览见泷原风貌的展望台',info: 'TV第五集public\\map\\Kyoko-head.png观察点', icon: '/map/瞭望台.png' },
+        { id: 13, x: 33, y: 68, name: '中学的上学路',info: 'public\\map\\Madoka-head.png-仁美-public\\map\\Sayaka-head.png固定刷新点',icon: '/map/道路.png'},
+        { id: 14, x: 78, y: 33, name: '河川敷',des:'沿着见泷原河河堤而筑的河川敷，附近有游乐场',info: '小说版确定为姬名河<br>TV第五集public\\map\\Madoka-head.png public\\map\\Sayaka-head.png对话', icon: '/map/风力发电站.svg'},
+        { id: 15, x: 95, y: 63, name: '教会',des:'见泷原郊外的教会',info: '※public\\map\\Kyoko-head.png及其家人曾经所在的教会<br>TV第七集public\\map\\Kyoko-head.png public\\map\\Sayaka-head.png谈话', icon: '/map/教堂.svg'},
         ],
     selectedPoint: null,
     hoveredPoint: null,
@@ -86,7 +86,7 @@ methods: {
   },
   formatInfo(info) {
     return info
-      .replace(/\n/g, '<br>')
+      .replace(/(public[\\/]+map[\\/]+[\w\-]+\.png)/g, '<img src="/$1" alt="HEADER" style="height:2.5em;vertical-align:middle;">')
       .replace(/(◈[^<]*)/g, '<span style="color:#b85c00;font-weight:bold;">$1</span>')
       .replace(/(\*[^<]*)/g, '<span style="color:#1976d2;font-weight:bold;">$1</span>')
       .replace(/(【[^】]+】)/g, '<span style="color:#d81b60;">$1</span>');
@@ -114,7 +114,7 @@ methods: {
   aspect-ratio: 16 / 9; /* 假设地图是 16:9 比例 */
   background: #2d133b;
   border-radius: 12px;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 .world-map {
   width: 100%;
@@ -269,3 +269,4 @@ methods: {
   }
 }
 </style>
+
