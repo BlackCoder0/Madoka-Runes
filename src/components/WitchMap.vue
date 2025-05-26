@@ -51,7 +51,8 @@
     <div class="episode-selector">
       <label>选择集数：</label>
       <select v-model="currentEpisode" @change="changeEpisode">
-        <option v-for="ep in episodes" :key="ep" :value="ep">{{ ep }} 集</option>
+        <option :value="0">请选择集数</option>
+        <option v-for="ep in episodes.filter(e => e !== 0)" :key="ep" :value="ep">第{{ ep }} 集</option>
       </select>
     </div>
   </div>
@@ -80,8 +81,8 @@ export default {
         { id: 15, x: 95, y: 63, name: '教会',des:'见泷原郊外的教会',info: '※public\\map\\Kyoko-head.png及其家人曾经所在的教会<br>TV第七集public\\map\\Kyoko-head.png public\\map\\Sayaka-head.png谈话', icon: '/map/教堂.svg'},
         ],
       // 模拟动画集数，有多条路径，每条路径是点位id的数组
-      episodes: [1, 2, 3],
-      currentEpisode: 1,
+      episodes: [0, 1, 4, 5, 6, 7],
+      currentEpisode: 0,
       pathsByEpisode: {
         1: [
           {
@@ -93,24 +94,111 @@ export default {
               { name: "鹿目圆/沙耶香", position: 0.6}, 
               { name: "鹿目圆/沙耶香/巴麻美", position: 0.9}, 
             ],
-            color: '#d81b60' // 添加路径颜色
+            color: '#ff99cc' // 添加路径颜色
           },
           {
             id: "path2",
             points: [6, 2,7],
             tags: [{ name: "晓美焰", position: 0.3 }],
-            color: '#1976d2' // 添加路径颜色
+            color: '#935ba5' // 添加路径颜色
           },
         ],
-        2: [
+        4: [
           {
             id: "path3",
-            points: [3, 1],
-            tags: [{ name: "美树沙耶香", position: 0.5 }],
-            color: '#b85c00' // 添加路径颜色
+            points: [1, 13,2,4,7,9],
+            tags: [
+              { name: "鹿目圆", position: 0.05 },
+              { name: "鹿目圆/沙耶香/仁美", position: 0.2}, 
+              { name: "鹿目圆/沙耶香", position: 0.55}, 
+              { name: "鹿目圆/仁美", position: 0.8}, 
+            ],
+            color: '#ff99cc' // 添加路径颜色
+          },
+          {
+            id: "path4",
+            points: [8,5, 13,2,5,9],
+            tags: [
+              { name: "沙耶香", position: 0.1},
+              { name: "魔法少女沙耶香", position: 0.8 },
+            ],
+            color: '#0059d6' // 添加路径颜色
           },
         ],
-        3: [],
+        5: [
+        {
+            id: "path5",
+            points: [2,14,7,8,7],
+            tags: [
+              { name: "圆/沙/仁", position: 0.1}, 
+              { name: "圆/沙", position: 0.3}, 
+              { name: "圆/焰", position: 0.6}, 
+              { name: "圆/沙", position: 0.6}, 
+            ],
+            color: '#ff99cc' // 添加路径颜色
+          },
+          {
+          id: "path6",
+            points: [14,5,8,7],
+            tags: [
+              { name: "沙耶香", position: 0.1}, 
+            ],
+            color: '#0059d6' // 添加路径颜色
+          },
+          {
+          id: "path7",
+            points: [12,7],
+            tags: [
+              { name: "杏子", position: 0.1}, 
+            ],
+            color: '#E60000' // 添加路径颜色
+          },
+        ],
+        6: [
+        {
+            id: "path8",
+            points: [7,8,7,5,11],
+            tags: [
+              { name: "沙耶香", position: 0.1}, 
+              { name: "沙/圆", position: 0.3}, 
+              { name: "沙/杏", position: 0.85}, 
+            ],
+            color: '#0059d6' // 添加路径颜色
+          },
+          {
+            id: "path9",
+            points: [7,5,11],
+            tags: [
+              { name: "杏子", position: 0.1}, 
+              { name: "杏/沙", position: 0.75}, 
+            ],
+            color: '#E60000' // 添加路径颜色
+          },
+        ],
+        7: [
+        {
+            id: "path8",
+            points: [8,15,8,13,2,7,8,9],
+            tags: [
+              { name: "沙耶香", position: 0.1}, 
+              { name: "沙/杏", position: 0.3}, 
+              { name: "沙/仁/圆", position: 0.5}, 
+              { name: "沙/仁", position: 0.6}, 
+              { name: "沙/圆", position: 0.7}, 
+            ],
+            color: '#0059d6' // 添加路径颜色
+          },
+          {
+            id: "path9",
+            points: [7,8,15,9],
+            tags: [
+              { name: "杏子", position: 0.1}, 
+              { name: "杏/沙", position: 0.5}, 
+              { name: "杏/焰", position: 0.95}, 
+            ],
+            color: '#E60000' // 添加路径颜色
+          },
+        ],
       },
       hoveredPoint: null,
       selectedPoint: null,
@@ -118,7 +206,7 @@ export default {
       canvasContext: null,
       animationFrameId: null,
       animationProgress: 0,
-      animationDuration: 1000,
+      animationDuration: 4000,
     };
   },
   computed: {
@@ -168,12 +256,8 @@ export default {
   mapImage.onload = () => {
     this.$nextTick(() => {
       this.resizeCanvas();
-      this.animationProgress = 1; // 直接显示完整路径
+      this.animationProgress = 0; // 从初始状态开始
       this.drawAnimatedPaths();
-      setTimeout(() => {
-        this.animationProgress = 0;
-        this.drawAnimatedPaths(); // 重置为动画初始状态
-      }, 50);
     });
   };
 },
@@ -245,77 +329,239 @@ export default {
     }, 100);
   });
 },
-    drawAnimatedPaths() {
-//       const container = this.$refs.mapContainer;
-// if (!container || container.clientWidth === 0) {
-//   return requestAnimationFrame(this.drawAnimatedPaths.bind(this));
-// };
-      const ctx = this.canvasContext;
-      if (!ctx) return;
+// 修改drawAnimatedPaths方法
+drawAnimatedPaths() {
+  const ctx = this.canvasContext;
+  if (!ctx) return;
 
-      const container = this.$refs.mapContainer;
-      const width = container.clientWidth;
-      const height = container.clientHeight;
+  const container = this.$refs.mapContainer;
+  const width = container.clientWidth;
+  const height = container.clientHeight;
 
-      ctx.clearRect(0, 0, width, height);
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-      // ctx.strokeStyle = "#d81b60"; // 移除固定颜色
-      ctx.lineWidth = 3;
+  ctx.clearRect(0, 0, width, height);
+  
+  const paths = this.visiblePaths;
+  if (!paths.length) return;
 
-      const paths = this.visiblePaths;
-      if (!paths.length) return;
+  // 定义动画参数
+  const FLOW_SPEED = 0.02;  // 虚线流动速度
+  const DASH_PATTERN = [10, 5]; // 虚线样式
 
-      const pixelPaths = paths.map(path => {
-        const pts = path.points
-          .map(pid => this.points.find(p => p.id === pid))
-          .filter(Boolean)
-          .map(p => ({ x: (p.x / 100) * width, y: (p.y / 100) * height }));
-        return { id: path.id, points: pts, color: path.color }; // 添加颜色信息
-      });
+  paths.forEach(path => {
+    const pts = path.points
+      .map(pid => this.points.find(p => p.id === pid))
+      .filter(Boolean)
+      .map(p => ({ x: (p.x / 100) * width, y: (p.y / 100) * height }));
 
-      const totalLength = pixelPaths.reduce((sum, path) => {
-        return sum + this.calculatePathLength(path.points);
-      }, 0);
+    // 计算当前绘制进度
+    const totalLength = this.calculatePathLength(pts);
+    const currentLength = totalLength * this.animationProgress;
 
-      const drawLength = totalLength * this.animationProgress;
+    // 绘制基础路径（已完成部分）
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    let drawnLength = 0;
+    
+    // 分段绘制路径
+    for (let i = 0; i < pts.length - 1; i++) {
+      const start = pts[i];
+      const end = pts[i + 1];
+      const segLength = this.distance(start, end);
 
-      let lengthDrawn = 0;
-      pixelPaths.forEach(path => {
-        const pts = path.points;
-        ctx.beginPath();
-        ctx.strokeStyle = path.color; // 使用路径颜色
-
-        for (let i = 0; i < pts.length - 1; i++) {
-          const segStart = pts[i];
-          const segEnd = pts[i + 1];
-          const segLength = this.distance(segStart, segEnd);
-
-          if (lengthDrawn + segLength < drawLength) {
-            ctx.moveTo(segStart.x, segStart.y);
-            ctx.lineTo(segEnd.x, segEnd.y);
-            lengthDrawn += segLength;
-          } else {
-            const remain = drawLength - lengthDrawn;
-            const ratio = remain / segLength;
-            const drawX = segStart.x + (segEnd.x - segStart.x) * ratio;
-            const drawY = segStart.y + (segEnd.y - segStart.y) * ratio;
-            ctx.moveTo(segStart.x, segStart.y);
-            ctx.lineTo(drawX, drawY);
-            lengthDrawn = drawLength;
-            break;
-          }
-        }
-        ctx.stroke();
-      });
-
-
-      if (this.animationProgress < 1) {
-        this.animationProgress += 16 / this.animationDuration; // 假设16ms一帧
-        if (this.animationProgress > 1) this.animationProgress = 1;
-        this.animationFrameId = requestAnimationFrame(this.drawAnimatedPaths);
+      if (drawnLength + segLength <= currentLength) {
+        ctx.lineTo(end.x, end.y);
+        drawnLength += segLength;
+      } else {
+        const ratio = (currentLength - drawnLength) / segLength;
+        const partialEnd = {
+          x: start.x + (end.x - start.x) * ratio,
+          y: start.y + (end.y - start.y) * ratio
+        };
+        ctx.lineTo(partialEnd.x, partialEnd.y);
+        break;
       }
-    },
+    }
+    
+    // 绘制实线基底
+    ctx.strokeStyle = path.color;
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    // 在已绘制部分添加流动虚线
+    if (currentLength > 0) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y);
+      let flowDrawn = 0;
+      
+      // 创建流动虚线路径
+      for (let i = 0; i < pts.length - 1; i++) {
+        const start = pts[i];
+        const end = pts[i + 1];
+        const segLength = this.distance(start, end);
+
+        if (flowDrawn + segLength <= currentLength) {
+          ctx.lineTo(end.x, end.y);
+          flowDrawn += segLength;
+        } else {
+          const ratio = (currentLength - flowDrawn) / segLength;
+          const partialEnd = {
+            x: start.x + (end.x - start.x) * ratio,
+            y: start.y + (end.y - start.y) * ratio
+          };
+          ctx.lineTo(partialEnd.x, partialEnd.y);
+          break;
+        }
+      }
+
+      // 动态虚线效果
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash(DASH_PATTERN);
+      ctx.lineDashOffset = -performance.now() * FLOW_SPEED; // 时间驱动流动
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // 绘制流动光点
+    if (currentLength > 0) {
+      ctx.save();
+      let accumulated = 0;
+      for (let i = 0; i < pts.length - 1; i++) {
+        const start = pts[i];
+        const end = pts[i + 1];
+        const segLength = this.distance(start, end);
+
+        if (accumulated + segLength > currentLength) {
+          const ratio = (currentLength - accumulated) / segLength;
+          const pos = {
+            x: start.x + (end.x - start.x) * ratio,
+            y: start.y + (end.y - start.y) * ratio
+          };
+          
+          // 光点渐变
+          const gradient = ctx.createRadialGradient(
+            pos.x, pos.y, 0, 
+            pos.x, pos.y, 6
+          );
+          gradient.addColorStop(0, 'rgba(255,255,255,0.9)');
+          gradient.addColorStop(1, 'rgba(255,255,255,0)');
+          
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(pos.x, pos.y, 6, 0, Math.PI * 2);
+          ctx.fill();
+          break;
+        }
+        accumulated += segLength;
+      }
+      ctx.restore();
+    }
+  });
+
+  // 更新动画进度
+  if (this.animationProgress < 1) {
+    this.animationProgress += 16 / this.animationDuration;
+    this.animationFrameId = requestAnimationFrame(this.drawAnimatedPaths);
+  } else {
+    // 完整绘制后保持流动效果
+    this.animationFrameId = requestAnimationFrame(() => {
+      this.drawFlowingEffect(); // 持续流动
+    });
+  }
+},
+
+// 新增持续流动方法
+drawFlowingEffect() {
+  const ctx = this.canvasContext;
+  if (!ctx) return;
+
+  const container = this.$refs.mapContainer;
+  const width = container.clientWidth;
+  const height = container.clientHeight;
+
+  // 清除画布
+  ctx.clearRect(0, 0, width, height);
+
+  // 流动效果参数
+  const FLOW_SPEED = 0.01; // 减小速度，使光点移动更平滑
+  const DASH_PATTERN = [10, 5];
+  const FLOW_COLOR = 'rgba(255, 255, 255, 0.8)';
+
+  this.visiblePaths.forEach(path => {
+    // 1. 获取路径的像素坐标
+    const pts = path.points
+      .map(pid => this.points.find(p => p.id === pid))
+      .filter(Boolean)
+      .map(p => ({
+        x: (p.x / 100) * width,
+        y: (p.y / 100) * height
+      }));
+
+    if (pts.length < 2) return;
+
+    // 2. 绘制路径实线基底
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    pts.slice(1).forEach(p => ctx.lineTo(p.x, p.y));
+    ctx.strokeStyle = path.color;
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    // 3. 创建路径流动虚线
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    pts.slice(1).forEach(p => ctx.lineTo(p.x, p.y));
+
+    // 4. 设置流动样式
+    ctx.strokeStyle = FLOW_COLOR;
+    ctx.lineWidth = 2;
+    ctx.setLineDash(DASH_PATTERN);
+    ctx.lineDashOffset = -performance.now() * FLOW_SPEED;
+    ctx.stroke();
+
+    // 5. 添加流动光点
+    const totalLength = this.calculatePathLength(pts);
+    const flowPosition = (performance.now() * FLOW_SPEED * 0.06) % 1; // 减小速度
+    const currentFlowLength = totalLength * flowPosition;
+
+    let accumulated = 0;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const start = pts[i];
+      const end = pts[i + 1];
+      const segLength = this.distance(start, end);
+
+      if (accumulated + segLength > currentFlowLength) {
+        const ratio = (currentFlowLength - accumulated) / segLength;
+        const pos = {
+          x: start.x + (end.x - start.x) * ratio,
+          y: start.y + (end.y - start.y) * ratio
+        };
+
+        // 绘制光点渐变
+        const gradient = ctx.createRadialGradient(
+          pos.x, pos.y, 0,
+          pos.x, pos.y, 10 // 增大光点大小
+        );
+        gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)'); // 增加透明度
+        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, 8, 0, Math.PI * 2); // 增大光点半径
+        ctx.fill();
+        break;
+      }
+      accumulated += segLength;
+    }
+
+    ctx.restore();
+  });
+
+  // 保持动画循环
+  this.animationFrameId = requestAnimationFrame(this.drawFlowingEffect);
+},
     distance(p1, p2) {
       return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
     },
@@ -445,6 +691,8 @@ export default {
   user-select: none;
   pointer-events: none;
   white-space: nowrap;
+  transition: transform 0.3s;
+  animation: tagPulse 1.5s infinite;
 }
 .info-panel {
   max-width: 300px;
@@ -499,7 +747,7 @@ export default {
   border-radius: 8px;
   white-space: normal;
   box-shadow: 0 0 8px rgba(200, 150, 255, 0.3);
-  z-index: 10;
+  z-index: 999;
   min-width: 200px;
   max-width: 280px;
 }
