@@ -2,7 +2,7 @@
   <div class="map-layout">
     <div class="map-container" ref="mapContainer">
 
-      <img src="/Madoka-Runes/map/Madoa_PSP_World_Map.jpg" alt="World Map" class="world-map" />
+      <img src="/map/Madoa_PSP_World_Map.jpg" alt="World Map" class="world-map" />
       <canvas ref="canvas" class="map-canvas"></canvas>
 
       <div class="points-container">
@@ -61,21 +61,21 @@
     data() {
       return {
         points: [
-          { id: 1, x: 20, y: 53, name: '鹿目圆家', des: '鹿目圆和家人居住的家', icon: '/Madoka-Runes/map/家.png' },
-          { id: 2, x: 49, y: 75, name: '见泷原中学校', des: '小圆等人就读的中学', icon: '/Madoka-Runes/map/学校.png' },
-          { id: 3, x: 35, y: 45, name: '见泷原入口', des: '见泷原入口，支持市民生活的交通要道', info: '◈人鱼的魔女Oktavia von Seckendorff<br>※Madoka-Runes\\map\\Sayaka-head.png变成魔女', icon: '/Madoka-Runes/map/车站.png' },
-          { id: 4, x: 65, y: 63, name: '巴麻美家', des: '巴麻美居住的公寓', icon: '/Madoka-Runes/map/家.png' },
-          { id: 5, x: 45, y: 25, name: '见泷原市综合医院', info: '◈零食的魔女 CHARLOTTE<br>※Madoka-Runes\\map\\Mami-head.png牺牲<br>※【天台】Madoka-Runes\\map\\Sayaka-head.png变成魔法少女<br>【天台】上条恭介康复后第一次拉琴', icon: '/Madoka-Runes/map/医院.png' },
-          { id: 6, x: 30, y: 36, name: '晓美焰家', des: '晓美焰居住的房间', icon: '/Madoka-Runes/map/家.png' },
-          { id: 7, x: 56, y: 46, name: '闹市', des: '聚集了学生和上班族的闹市', info: '◈玫瑰园的魔女GERTRUD<br>◈【小巷】银之魔女GISELA<br>【CD店】Madoka-Runes\\map\\Sayaka-head.png常去的CD店<br>【游戏中心】Madoka-Runes\\map\\Kyoko-head.png常去的跳舞机<br>【酒店】Madoka-Runes\\map\\Kyoko-head.png居住所在', icon: '/Madoka-Runes/map/闹市.png' },
-          { id: 8, x: 24, y: 76, name: '美树沙耶香家', des: '美树沙耶香和家人居住的公寓', icon: '/Madoka-Runes/map/家.png' },
-          { id: 9, x: 94, y: 40, name: '工业地带', des: '各类工厂林立的工业地带', info: '◈影之魔女Elsa Maria<br>◈【废工厂】箱之魔女H.N. ELLY (KIRSTEN)<br>【废工厂】魔法少女Madoka-Runes\\map\\Sayaka-head.png首战<br>【军事基地】Madoka-Runes\\map\\Homura-head.png获取军火', icon: '/Madoka-Runes/map/工厂.png' },
-          { id: 10, x: 10, y: 46, name: '公园', des: '车站附近的公园，见泷原市民休息的场所', info: 'TV第三集Madoka-Runes\\map\\Homura-head.pngMadoka-Runes\\map\\Mami-head.png对持<br>仁美对上条恭介告白<br>TV第八集Madoka-Runes\\map\\Homura-head.pngMadoka-Runes\\map\\Madoka-head.png对话<br>Madoka-Runes\\map\\Kyube-head.png被打成筛子', icon: '/Madoka-Runes/map/公园.png' },
-          { id: 11, x: 67, y: 31, name: '干线道路及步行天桥', info: '※众人首次得知灵魂宝石作用<br>Madoka-Runes\\map\\Sayaka-head.png Madoka-Runes\\map\\Kyoko-head.png战斗', icon: '/Madoka-Runes/map/桥梁.png' },
-          { id: 12, x: 80, y: 50, name: '展望台', des: '一览见泷原风貌的展望台', info: 'TV第五集Madoka-Runes\\map\\Kyoko-head.png观察点', icon: '/Madoka-Runes/map/瞭望台.png' },
-          { id: 13, x: 33, y: 68, name: '中学的上学路', info: 'Madoka-Runes\\map\\Madoka-head.png-仁美-Madoka-Runes\\map\\Sayaka-head.png固定刷新点', icon: '/Madoka-Runes/map/道路.png' },
-          { id: 14, x: 80, y: 33, name: '河川敷', des: '沿着见泷原河河堤而筑的河川敷，附近有游乐场', info: '小说版确定为姬名河<br>TV第五集Madoka-Runes\\map\\Madoka-head.png Madoka-Runes\\map\\Sayaka-head.png对话', icon: '/Madoka-Runes/map/风力发电站.svg' },
-          { id: 15, x: 95, y: 63, name: '教会', des: '见泷原郊外的教会', info: '※Madoka-Runes\\map\\Kyoko-head.png及其家人曾经所在的教会<br>TV第七集Madoka-Runes\\map\\Kyoko-head.png Madoka-Runes\\map\\Sayaka-head.png谈话', icon: '/Madoka-Runes/map/教堂.svg' },
+          { id: 1, x: 20, y: 53, name: '鹿目圆家', des: '鹿目圆和家人居住的家', icon: '/map/家.png' },
+          { id: 2, x: 49, y: 75, name: '见泷原中学校', des: '小圆等人就读的中学', icon: '/map/学校.png' },
+          { id: 3, x: 35, y: 45, name: '见泷原入口', des: '见泷原入口，支持市民生活的交通要道', info: '◈人鱼的魔女Oktavia von Seckendorff<br>※Madoka-Runes\\map\\Sayaka-head.png变成魔女', icon: '/map/车站.png' },
+          { id: 4, x: 65, y: 63, name: '巴麻美家', des: '巴麻美居住的公寓', icon: '/map/家.png' },
+          { id: 5, x: 45, y: 25, name: '见泷原市综合医院', info: '◈零食的魔女 CHARLOTTE<br>※Madoka-Runes\\map\\Mami-head.png牺牲<br>※【天台】Madoka-Runes\\map\\Sayaka-head.png变成魔法少女<br>【天台】上条恭介康复后第一次拉琴', icon: '/map/医院.png' },
+          { id: 6, x: 30, y: 36, name: '晓美焰家', des: '晓美焰居住的房间', icon: '/map/家.png' },
+          { id: 7, x: 56, y: 46, name: '闹市', des: '聚集了学生和上班族的闹市', info: '◈玫瑰园的魔女GERTRUD<br>◈【小巷】银之魔女GISELA<br>【CD店】Madoka-Runes\\map\\Sayaka-head.png常去的CD店<br>【游戏中心】Madoka-Runes\\map\\Kyoko-head.png常去的跳舞机<br>【酒店】Madoka-Runes\\map\\Kyoko-head.png居住所在', icon: '/map/闹市.png' },
+          { id: 8, x: 24, y: 76, name: '美树沙耶香家', des: '美树沙耶香和家人居住的公寓', icon: '/map/家.png' },
+          { id: 9, x: 94, y: 40, name: '工业地带', des: '各类工厂林立的工业地带', info: '◈影之魔女Elsa Maria<br>◈【废工厂】箱之魔女H.N. ELLY (KIRSTEN)<br>【废工厂】魔法少女Madoka-Runes\\map\\Sayaka-head.png首战<br>【军事基地】Madoka-Runes\\map\\Homura-head.png获取军火', icon: '/map/工厂.png' },
+          { id: 10, x: 10, y: 46, name: '公园', des: '车站附近的公园，见泷原市民休息的场所', info: 'TV第三集Madoka-Runes\\map\\Homura-head.pngMadoka-Runes\\map\\Mami-head.png对持<br>仁美对上条恭介告白<br>TV第八集Madoka-Runes\\map\\Homura-head.pngMadoka-Runes\\map\\Madoka-head.png对话<br>Madoka-Runes\\map\\Kyube-head.png被打成筛子', icon: '/map/公园.png' },
+          { id: 11, x: 67, y: 31, name: '干线道路及步行天桥', info: '※众人首次得知灵魂宝石作用<br>Madoka-Runes\\map\\Sayaka-head.png Madoka-Runes\\map\\Kyoko-head.png战斗', icon: '/map/桥梁.png' },
+          { id: 12, x: 80, y: 50, name: '展望台', des: '一览见泷原风貌的展望台', info: 'TV第五集Madoka-Runes\\map\\Kyoko-head.png观察点', icon: '/map/瞭望台.png' },
+          { id: 13, x: 33, y: 68, name: '中学的上学路', info: 'Madoka-Runes\\map\\Madoka-head.png-仁美-Madoka-Runes\\map\\Sayaka-head.png固定刷新点', icon: '/map/道路.png' },
+          { id: 14, x: 80, y: 33, name: '河川敷', des: '沿着见泷原河河堤而筑的河川敷，附近有游乐场', info: '小说版确定为姬名河<br>TV第五集Madoka-Runes\\map\\Madoka-head.png Madoka-Runes\\map\\Sayaka-head.png对话', icon: '/map/风力发电站.svg' },
+          { id: 15, x: 95, y: 63, name: '教会', des: '见泷原郊外的教会', info: '※Madoka-Runes\\map\\Kyoko-head.png及其家人曾经所在的教会<br>TV第七集Madoka-Runes\\map\\Kyoko-head.png Madoka-Runes\\map\\Sayaka-head.png谈话', icon: '/map/教堂.svg' },
         ],
         // 模拟动画集数，有多条路径，每条路径是点位id的数组
         episodes: [0, 1, 4, 5, 6, 7],
@@ -252,7 +252,7 @@
 
       // 确保地图图片加载完成后再初始化
       const mapImage = new Image();
-      mapImage.src = "/Madoka-Runes/map/Madoa_PSP_World_Map.jpg";
+      mapImage.src = "/map/Madoa_PSP_World_Map.jpg";
       mapImage.onload = () => {
         this.$nextTick(() => {
           this.resizeCanvas();
@@ -322,7 +322,7 @@
       },
       formatInfo(info) {
         return info
-          .replace(/(public[\\/]+map[\\/]+[\w\-]+\.png)/g, '<img src="/$1" alt="HEADER" style="height:2.5em;vertical-align:middle;">')
+          .replace(/(Madoka-Runes[\\/]+map[\\/]+[\w\-]+\.png)/g, '<img src="/$1" alt="HEADER" style="height:2.5em;vertical-align:middle;">')
           .replace(/(TV第\d+集)/g, '<span style="font-family:Times New Roman">$1</span>')
           .replace(/(TV|CD)/g, '<span style="font-family:Times New Roman">$1</span>')
           .replace(/(◈[^<]*)/g, '<span style="font-family:MadokaRunes;color:#b85c00;font-weight:bold;">$1</span>')
