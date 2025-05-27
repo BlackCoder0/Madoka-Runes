@@ -60,7 +60,6 @@ jQuery(document).ready(function() {
         }
 
         // 初始化角色图片
-        // 初始化角色图片
         $('.chara').css('background-image', 'url(' + getRandomCharaImage() + ')');
         // randchat();
         // var autoloop = setInterval(randchat, 15000);
@@ -114,11 +113,10 @@ function showMessage(a, b) {
 
 function randchat(b) {
     if (b == null) {
-        let currentImage = $('.chara').css('background-image');
-        // 提取出文件路径中相对路径部分
-        const match = currentImage.match(/\/Madoka-Runes\/assets\/105px-[^"]+/);
-        currentImage = match ? match[0] : '';
-
+        let currentImage = $('.chara').css('background-image'); 
+        const match = currentImage.match(/assets\/105px-[^"')]+/);
+        currentImage = match ? ('./' + match[0]) : '';
+        
         const specificMsgs = character_specific_msgs[currentImage] || [];
         const allMsgs = shared_msgs.concat(specificMsgs);
 
