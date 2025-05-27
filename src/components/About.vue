@@ -33,11 +33,11 @@
       </ul>
     </section>
     <section class="about-section proverb-section">
-      <blockquote class="proverb">Dont' forget<br>
-Always somewhere<br>
-someone is fighting for you<br>
-——As long as you remember her<br>
-you are not along</blockquote>
+      <blockquote class="proverb">Dont' forget.<br>
+Always, somewhere,<br>
+someone is fighting for you.<br>
+——As long as you remember her,<br>
+you are not along.</blockquote>
     </section>
   </div>
 </template>

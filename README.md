@@ -88,6 +88,6 @@ Vue + GitHubPage的组合拳简直是神之折磨<br>
 
 希望这个项目能为所有《魔法少女小圆》的粉丝带来帮助和回忆。
 
-> "Don't forget, always somewhere, someone is fighting for you. As long as you remember her, you are not alone."
+> "Don't forget. always,somewhere, someone is fighting for you. ——As long as you remember her, you are not alone."
 
 
