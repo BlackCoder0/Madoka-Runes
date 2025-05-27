@@ -35,7 +35,7 @@
         const backgroundSize = this.$route.meta.backgroundSize || 'cover'; // 默认为 cover
 
         if (backgroundImage) {
-          document.body.style.backgroundImage = `url('/Madoka-Runes/assets/${backgroundImage}')`;
+          document.body.style.backgroundImage = `url('./assets/${backgroundImage}')`;
           document.body.style.backgroundSize = backgroundSize;
           document.body.style.backgroundRepeat = 'no-repeat';
           document.body.style.backgroundPosition = 'center center';
