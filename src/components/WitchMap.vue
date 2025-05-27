@@ -694,6 +694,7 @@
     left: 0;
     width: 100%;
     height: 100%;
+    z-index: 100;
     /* pointer-events: none; */
   }
 
@@ -725,6 +726,7 @@
     background-color: rgba(0, 0, 0, 0.6);
     padding: 2px 6px;
     border-radius: 4px;
+    z-index: 99;
     white-space: nowrap;
   }
 
@@ -751,6 +753,7 @@
     box-shadow: 0 0 10px rgba(200, 150, 255, 0.4);
     font-size: 0.95rem;
     line-height: 1.5;
+    z-index: 1000;
     color: #fceeff;
     backdrop-filter: blur(6px);
     transition: all 0.3s ease;
@@ -840,7 +843,7 @@
       width: 130% !important;
       height: auto !important;
       left: 50%;
-      transform: translateX(-50%) scale(0.9);
+      transform: translateX(-50%);
       transform-origin: center center;
       margin-left: 0;
       overflow: visible;
@@ -865,6 +868,18 @@
     .map-container {
       /* height: calc(100vh - 80px); */
       margin-top: 120px;
+      margin-bottom: 50vh; /* 调整为 info-panel 的高度，或者一个更大的值 */
+    }
+
+
+
+    .point-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .map-container {
+      margin-bottom: 50vh; /* 调整为 info-panel 的高度，或者一个更大的值 */
     }
 
     .info-panel {
@@ -872,14 +887,16 @@
       bottom: 0;
       left: 0;
       right: 0;
-      top: 50%;
+      /* top: 50%; */
       max-width: none;
       width: 100%;
       z-index: 999;
-      border-radius: 12px 12px 0 0;
+      border-radius: 0;
       box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
-      margin-top: 2%;
-      margin-bottom: 20%;
+      /* margin-top: 2%; */
+      margin-bottom: 4%; /* 移除 info-panel 自身的 margin-bottom */
+      max-height: 50%; /* 限制最大高度为屏幕的50% */
+      overflow-y: auto; /* 内容超出时显示滚动条 */
     }
 
     .point-icon {
@@ -902,7 +919,7 @@
 
     .episode-selector {
       position: fixed;
-      top: 60%;
+      top: 65%;
       left: 0;
       right: 0;
       margin: 0 auto;
