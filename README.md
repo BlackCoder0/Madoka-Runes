@@ -1,6 +1,9 @@
-# Madoka-Runes 项目
+<p align="center">
+  <img src="public/readme/trans_bg.png" style="width: 60%; max-width: 500px;">
+</p>
 
-欢迎来到 Madoka-Runes 项目！这个项目来源于今年年初补番的《魔法少女小圆》。<br>
+# Madoka-Runes 项目
+欢迎来到 Madoka-Runes ！这个项目来源于今年年初补番的《魔法少女小圆》。<br>
 真的！真的！真的很好看！<br>
 然后做了这个小工具网站，网站链接：[madorunes.cn](madorunes.cn)<br>
 ## 项目简介
@@ -8,9 +11,27 @@
 Madoka-Runes 是一个基于《魔法少女小圆》背景的项目。主要功能包括：
 
 - **魔女文一览表**：提供了多种魔女文字体的一览速查
+<p align="center">
+  <img src="public/readme/图表.png" style="width: 65%; max-width: 500px;">
+</p>
+
 - **魔女文转换器**：实现英文/数字/德文→多种魔女文字体的转换，并可一键下载空白背景的文字图片
+<p align="center">
+  <img src="public/readme/转换器.png" style="width: 65%; max-width: 500px;">
+</p>
+
 - **见泷原地图**：基于TV版《魔法少女小圆》，结合游戏《魔法少女小圆 携带版》中的资源和剧情对见泷原内的地点和事件进行标注。对可以索引到角色具体行动路线的，按集数实现路径显示。
-- **角色互动**：电脑端有可爱的主角团看板娘，欢迎戳戳。<br><br>
+<p align="center">
+  <img src="public/readme/地图.png" style="width: 65%; max-width: 500px;">
+  <img src="public/readme/信息.png" style="width: 65%; max-width: 500px;">
+  <img src="public/readme/路径图.gif" style="width: 65%; max-width: 500px;">
+</p>
+
+- **角色互动**：电脑端有可爱的主角团看板娘，欢迎戳戳。
+<div style="text-align: center;">
+  <img src="public/readme/看板娘.png" style="width: 30%; max-width: 500px;">
+</div>
+<br><br>
 本页面的古代文/现代文字体使用的是 MadokaRunes（2.0属实不知道怎么用），部分字符有缺失。
 
 
