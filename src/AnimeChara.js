@@ -116,7 +116,7 @@ function randchat(b) {
     if (b == null) {
         let currentImage = $('.chara').css('background-image');
         // 提取出文件路径中相对路径部分
-        const match = currentImage.match(/\/src\/assets\/105px-[^"]+/);
+        const match = currentImage.match(/\/Madoka-Runes\/assets\/105px-[^"]+/);
         currentImage = match ? match[0] : '';
 
         const specificMsgs = character_specific_msgs[currentImage] || [];
