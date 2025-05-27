@@ -6,6 +6,7 @@
         <li><a href="https://zh.moegirl.org.cn/Mainpage#" target="_blank">萌娘百科</a></li>
         <li><a href="https://magireco.moe/wiki/%E9%A6%96%E9%A1%B5" target="_blank">魔法纪录中文Wiki</a></li>
         <li><a href="https://tieba.baidu.com/p/4525882479?pn=5#" target="_blank">百度贴吧</a></li>
+        <li><a href="https://wiki.biligame.com/pcr/%E9%A6%96%E9%A1%B5" target="_blank">公主连结BWIKI</a></li>
       </ul>
     </section>
     <section class="about-section">
