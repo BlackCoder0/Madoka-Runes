@@ -8,24 +8,43 @@
           {{ font.name }}
         </option>
       </select>
+
+      <label style="color:#f4fef9">导出倍数：</label>
+      <select v-model="exportRatio">
+        <option :value="1">1x</option>
+        <option :value="2">2x</option>
+        <option :value="3">3x</option>
+      </select>
+
+
       <textarea v-model="inputText" placeholder="请输入英文/数字/德语文字" rows="3"></textarea>
       <button @click="renderCanvasAndDownload">下载截图</button>
     </div>
+
     <div class="output-area" ref="outputArea">
-      <pre
-        :style="{fontFamily: selectedFont.cssName, fontSize: '2.2rem', background: 'transparent', color: 'black', margin: 0, padding: 0, border: 'none', whiteSpace: 'pre-wrap', wordBreak: 'break-all', textAlign: 'left'}"
-        :key="selectedFont.cssName">{{selectedFont.name === '古代体' ? inputText.toUpperCase() : selectedFont.name === '现代体' ? inputText.toLowerCase() : inputText }}</pre>
+      <pre :style="{
+          fontFamily: selectedFont.cssName,
+          fontSize: '2.2rem',
+          background: backgroundColor,
+          color: fontColor,
+          margin: 0,
+          padding: '0',
+          border: 'none',
+          whiteSpace: 'pre-wrap',
+          wordBreak: 'break-all',
+          textAlign: 'left'
+        }">{{ displayText }}</pre>
     </div>
   </div>
 </template>
 
 <script>
-  import html2canvas from 'html2canvas';
   export default {
     name: 'WitchFontConverter',
     data() {
       return {
         inputText: '',
+        exportRatio: 1,
         selectedFont: { name: '古代体', cssName: 'MadokaRunes' },
         fonts: [
           { name: '古代体', cssName: 'MadokaRunes' },
@@ -33,61 +52,66 @@
           { name: '音乐体', cssName: 'MadokaMusical' },
           { name: '哥特体', cssName: 'nkf11_magicum_texturae' },
           { name: '黑花体', cssName: 'MadokaLetters' },
-          { name: '圆体', cssName: 'nkf10_magicum_comicum_crassum' },
+          { name: '圆体', cssName: 'nkf10_magicum_comicum_crassum' }
         ]
+      };
+    },
+    computed: {
+      displayText() {
+        if (this.selectedFont.name === '古代体') return this.inputText.toUpperCase();
+        if (this.selectedFont.name === '现代体') return this.inputText.toLowerCase();
+        return this.inputText;
       }
     },
     methods: {
       renderCanvasAndDownload() {
-        const text = this.selectedFont.name === '古代体'
-          ? this.inputText.toUpperCase()
-          : this.selectedFont.name === '现代体'
-            ? this.inputText.toLowerCase()
-            : this.inputText;
-
+        const text = this.displayText;
         const fontName = this.selectedFont.cssName;
+        const fontLabel = this.selectedFont.name;
         const fontSize = 48;
         const lineHeight = fontSize * 1.4;
+        const padding = 20;
+        const ratio = Number(this.exportRatio);
 
         const lines = text.split('\n');
 
-        // 创建临时 canvas 获取上下文计算文本宽度
         const tempCanvas = document.createElement('canvas');
         const ctx = tempCanvas.getContext('2d');
         ctx.font = `${fontSize}px '${fontName}'`;
+        const maxLineWidth = Math.max(...lines.map(line => ctx.measureText(line).width));
 
-        const textWidths = lines.map(line => ctx.measureText(line).width);
-        const maxWidth = Math.max(...textWidths);
-        const canvasWidth = Math.ceil(maxWidth + 40); // 20px padding left/right
-        const canvasHeight = Math.ceil(lines.length * lineHeight + 40); // 20px padding top/bottom
+        const canvasWidth = Math.ceil(maxLineWidth + padding * 2);
+        const canvasHeight = Math.ceil(lines.length * lineHeight + padding * 2);
 
-        // 创建最终 canvas
         const canvas = document.createElement('canvas');
-        canvas.width = canvasWidth;
-        canvas.height = canvasHeight;
+        canvas.width = canvasWidth * ratio;
+        canvas.height = canvasHeight * ratio;
 
         const finalCtx = canvas.getContext('2d');
-        finalCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+        finalCtx.scale(ratio, ratio);
 
-        finalCtx.fillStyle = '#000000';
+        finalCtx.clearRect(0, 0, canvasWidth, canvasHeight);
         finalCtx.font = `${fontSize}px '${fontName}'`;
         finalCtx.textBaseline = 'top';
+        finalCtx.fillStyle = '#000';
 
         lines.forEach((line, index) => {
-          finalCtx.fillText(line, 20, 20 + index * lineHeight);
+          finalCtx.fillText(line, padding, padding + index * lineHeight);
         });
 
+        const now = new Date();
+        const timestamp = `${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}-${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}`;
+        const filename = `${fontLabel}-${timestamp}-${ratio}x.png`;
+
         const link = document.createElement('a');
-        link.download = 'witch-font.png';
+        link.download = filename;
         link.href = canvas.toDataURL('image/png');
         link.click();
-      }
-
-
-
+      },
     }
-  }
+  };
 </script>
+
 
 <style scoped>
   .witch-font-converter {
@@ -101,13 +125,6 @@
     width: 100%;
     max-width: 60vw;
     min-width: 500px;
-
-    @media (max-width: 768px) {
-      max-width: 90vw;
-      margin-top: 45%;
-      min-width: 30vw;
-    }
-
     box-sizing: border-box;
   }
 
@@ -126,7 +143,8 @@
     font-size: 1.1rem;
   }
 
-  select {
+  select,
+  input[type="color"] {
     border-radius: 6px;
     border: 1px solid #e0e0e0;
     padding: 0.3rem 0.6rem;
@@ -152,12 +170,17 @@
     min-height: 3.5rem;
     border: 1px dashed #e0bfe6;
     border-radius: 8px;
-    padding: 1rem;
+    padding: 0.5rem;
     background: transparent;
     word-break: break-all;
   }
 
-  .no-border {
-    border: none !important;
+
+  @media (max-width: 768px) {
+    .witch-font-converter {
+      max-width: 90vw;
+      margin-top: 45%;
+      min-width: 30vw;
+    }
   }
 </style>
