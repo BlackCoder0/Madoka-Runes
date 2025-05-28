@@ -11,10 +11,14 @@
       <textarea v-model="inputText" placeholder="请输入英文/数字/德语文字" rows="3"></textarea>
       <button @click="downloadImage">下载截图</button>
     </div>
-    <div class="output-area" ref="outputArea">
+    <div class="output-area">
       <pre
-        :style="{fontFamily: selectedFont.cssName, fontSize: '2.2rem', background: 'transparent', color: 'black', margin: 0, padding: 0, border: 'none', whiteSpace: 'pre-wrap', wordBreak: 'break-all', textAlign: 'left'}"
-        :key="selectedFont.cssName">{{selectedFont.name === '古代体' ? inputText.toUpperCase() : selectedFont.name === '现代体' ? inputText.toLowerCase() : inputText }}</pre>
+        ref="outputArea"
+        class="output-area-text"
+        :style="{ fontFamily: selectedFont.cssName }"
+      >{{
+        selectedFont.name === '古代体' ? inputText.toUpperCase() : selectedFont.name === '现代体' ? inputText.toLowerCase() : inputText
+      }}</pre>
     </div>
   </div>
 </template>
@@ -117,5 +121,17 @@
     padding: 1rem;
     background: transparent;
     word-break: break-all;
+
+    .output-area-text {
+      text-align: center;
+      font-size: 2.2rem;
+      background: transparent;
+      color: black;
+      margin: 0;
+      padding: 0;
+      border: none;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
   }
 </style>
