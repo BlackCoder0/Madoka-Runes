@@ -9,7 +9,7 @@
         </option>
       </select>
       <textarea v-model="inputText" placeholder="请输入英文/数字/德语文字" rows="3"></textarea>
-      <button @click="downloadImage">下载截图</button>
+      <button @click="renderCanvasAndDownload">下载截图</button>
     </div>
     <div class="output-area" ref="outputArea">
       <pre
@@ -38,15 +38,53 @@
       }
     },
     methods: {
-      async downloadImage() {
-        const node = this.$refs.outputArea;
-        if (!node) return;
-        const canvas = await html2canvas(node, { backgroundColor: null });
+      renderCanvasAndDownload() {
+        const text = this.selectedFont.name === '古代体'
+          ? this.inputText.toUpperCase()
+          : this.selectedFont.name === '现代体'
+            ? this.inputText.toLowerCase()
+            : this.inputText;
+
+        const fontName = this.selectedFont.cssName;
+        const fontSize = 48;
+        const lineHeight = fontSize * 1.4;
+
+        const lines = text.split('\n');
+
+        // 创建临时 canvas 获取上下文计算文本宽度
+        const tempCanvas = document.createElement('canvas');
+        const ctx = tempCanvas.getContext('2d');
+        ctx.font = `${fontSize}px '${fontName}'`;
+
+        const textWidths = lines.map(line => ctx.measureText(line).width);
+        const maxWidth = Math.max(...textWidths);
+        const canvasWidth = Math.ceil(maxWidth + 40); // 20px padding left/right
+        const canvasHeight = Math.ceil(lines.length * lineHeight + 40); // 20px padding top/bottom
+
+        // 创建最终 canvas
+        const canvas = document.createElement('canvas');
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+
+        const finalCtx = canvas.getContext('2d');
+        finalCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+        finalCtx.fillStyle = '#000000';
+        finalCtx.font = `${fontSize}px '${fontName}'`;
+        finalCtx.textBaseline = 'top';
+
+        lines.forEach((line, index) => {
+          finalCtx.fillText(line, 20, 20 + index * lineHeight);
+        });
+
         const link = document.createElement('a');
         link.download = 'witch-font.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
       }
+
+
+
     }
   }
 </script>
@@ -117,5 +155,9 @@
     padding: 1rem;
     background: transparent;
     word-break: break-all;
+  }
+
+  .no-border {
+    border: none !important;
   }
 </style>
