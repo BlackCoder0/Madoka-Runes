@@ -9,12 +9,27 @@
         </option>
       </select>
 
-      <label style="color:#f4fef9">导出倍数：</label>
-      <select v-model="exportRatio">
-        <option :value="1">1x</option>
-        <option :value="2">2x</option>
-        <option :value="3">3x</option>
-      </select>
+
+
+      <label style="color:#f4fef9">字体颜色：</label>
+      <div class="color-row">
+  <select v-model="fontColor">
+    <option v-for="color in fixedColors" :key="color.value" :value="color.value">
+      {{ color.name }}
+    </option>
+  </select>
+
+  <input
+    ref="colorPicker"
+    class="jscolor"
+    :value="fontColor"
+    @input="fontColor = $event.target.value"
+    data-jscolor="{ preset: 'dark', closeButton: true, closeText: 'OK' }"
+  />
+</div>
+
+      <label style="color:#f4fef9">字体大小 (px)：</label>
+      <input type="number" v-model="fontSize" min="1">
 
 
       <textarea v-model="inputText" placeholder="请输入英文/数字/德语文字" rows="3"></textarea>
@@ -24,7 +39,7 @@
     <div class="output-area" ref="outputArea">
       <pre :style="{
           fontFamily: selectedFont.cssName,
-          fontSize: '2.2rem',
+          fontSize: fontSize + 'rem',
           background: backgroundColor,
           color: fontColor,
           margin: 0,
@@ -44,8 +59,18 @@
     data() {
       return {
         inputText: '',
-        exportRatio: 1,
         selectedFont: { name: '古代体', cssName: 'MadokaRunes' },
+        fontColor: '#000000',
+        fontSize: 2.2,
+        fixedColors: [
+          { name: '黑色', value: '#000000' },
+          { name: '鹿目圆色', value: '#ff99cc' },
+          { name: '晓美焰色', value: '#935ba5' },
+          { name: '巴麻美色', value: '#F4DE90' },
+          { name: '沙耶香色', value: '#0059d6' },
+          { name: '杏子色', value: '#E60000' },
+          { name: '白色', value: '#FFFFFF' },
+        ],
         fonts: [
           { name: '古代体', cssName: 'MadokaRunes' },
           { name: '现代体', cssName: 'MadokaRunes' },
@@ -64,14 +89,17 @@
       }
     },
     methods: {
+      updateFontColor(picker) {
+        this.fontColor = '#' + picker.toHEXString();
+      },
       renderCanvasAndDownload() {
         const text = this.displayText;
         const fontName = this.selectedFont.cssName;
         const fontLabel = this.selectedFont.name;
-        const fontSize = 48;
+        const fontSize = this.fontSize * 16; // Convert rem to px (assuming 1rem = 16px)
         const lineHeight = fontSize * 1.4;
         const padding = 20;
-        const ratio = Number(this.exportRatio);
+        const ratio = 1; // 移除导出倍数，固定为1
 
         const lines = text.split('\n');
 
@@ -93,7 +121,7 @@
         finalCtx.clearRect(0, 0, canvasWidth, canvasHeight);
         finalCtx.font = `${fontSize}px '${fontName}'`;
         finalCtx.textBaseline = 'top';
-        finalCtx.fillStyle = '#000';
+        finalCtx.fillStyle = this.fontColor;
 
         lines.forEach((line, index) => {
           finalCtx.fillText(line, padding, padding + index * lineHeight);
@@ -101,15 +129,30 @@
 
         const now = new Date();
         const timestamp = `${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}-${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}`;
-        const filename = `${fontLabel}-${timestamp}-${ratio}x.png`;
-
+        // 获取输入内容前10个字符（去除空格和特殊符号）
+        const shortContent = text.replace(/[^\w\u4e00-\u9fa5]/g, '').slice(0, 10) || 'text';
+        const filename = `${fontLabel}-${shortContent}-${timestamp}.png`;
         const link = document.createElement('a');
         link.download = filename;
         link.href = canvas.toDataURL('image/png');
         link.click();
       },
+    },
+    mounted() {
+    this.$nextTick(() => {
+      if (window.jscolor && this.$refs.colorPicker) {
+        this.jscolorInstance = new window.jscolor(this.$refs.colorPicker);
+      }
+    });
+  },
+  watch: {
+  fontColor(newVal) {
+    if (this.jscolorInstance) {
+      this.jscolorInstance.fromString(newVal);
     }
-  };
+  }
+}
+};
 </script>
 
 
@@ -174,6 +217,15 @@
     background: transparent;
     word-break: break-all;
   }
+  .color-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.color-row select,
+.color-row input {
+  width: 50%;
+}
 
 
   @media (max-width: 768px) {
