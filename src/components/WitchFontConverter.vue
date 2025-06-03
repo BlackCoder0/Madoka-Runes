@@ -28,7 +28,7 @@
   />
 </div>
 
-      <label style="color:#f4fef9">字体大小 (px)：</label>
+      <label style="color:#f4fef9;font-family:Microsoft YaHe">字体大小 (px)：</label>
       <input type="number" v-model="fontSize" min="1">
 
 
