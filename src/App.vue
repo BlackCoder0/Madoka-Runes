@@ -89,7 +89,7 @@
   @font-face {
   font-family: 'MadokaRunes2';
   src: url('/ttf/MadokaRunes-2.0.ttf') format('truetype');
-}
+  }
 
   @font-face {
     font-family: 'nkf10_magicum_comicum_crassum';
