@@ -39,7 +39,7 @@
     <div class="output-area" ref="outputArea">
       <pre :style="{
           fontFamily: selectedFont.cssName,
-          fontSize: fontSize + 'rem',
+          fontSize: fontSize + 'px',
           background: backgroundColor,
           color: fontColor,
           margin: 0,
@@ -59,9 +59,9 @@
     data() {
       return {
         inputText: '',
-        selectedFont: { name: '古代体', cssName: 'MadokaRunes' },
+        selectedFont: { name: '古代体', cssName: 'MadokaRunes2' },
         fontColor: '#000000',
-        fontSize: 2.2,
+        fontSize: 32,
         fixedColors: [
           { name: '黑色', value: '#000000' },
           { name: '鹿目圆色', value: '#ff99cc' },
@@ -72,8 +72,8 @@
           { name: '白色', value: '#FFFFFF' },
         ],
         fonts: [
-          { name: '古代体', cssName: 'MadokaRunes' },
-          { name: '现代体', cssName: 'MadokaRunes' },
+          { name: '古代体', cssName: 'MadokaRunes2' },
+          { name: '现代体', cssName: 'MadokaRunes2' },
           { name: '音乐体', cssName: 'MadokaMusical' },
           { name: '哥特体', cssName: 'nkf11_magicum_texturae' },
           { name: '黑花体', cssName: 'MadokaLetters' },
@@ -96,9 +96,9 @@
         const text = this.displayText;
         const fontName = this.selectedFont.cssName;
         const fontLabel = this.selectedFont.name;
-        const fontSize = this.fontSize * 16; // Convert rem to px (assuming 1rem = 16px)
-        const lineHeight = fontSize * 1.4;
-        const padding = 20;
+        const fontSize = this.fontSize;
+        const actualLineHeight = Math.ceil(fontSize * 1.1);
+        const padding = 8;
         const ratio = 1; // 移除导出倍数，固定为1
 
         const lines = text.split('\n');
@@ -109,7 +109,7 @@
         const maxLineWidth = Math.max(...lines.map(line => ctx.measureText(line).width));
 
         const canvasWidth = Math.ceil(maxLineWidth + padding * 2);
-        const canvasHeight = Math.ceil(lines.length * lineHeight + padding * 2);
+        const canvasHeight = Math.ceil(lines.length * actualLineHeight + padding * 2);
 
         const canvas = document.createElement('canvas');
         canvas.width = canvasWidth * ratio;
@@ -124,8 +124,9 @@
         finalCtx.fillStyle = this.fontColor;
 
         lines.forEach((line, index) => {
-          finalCtx.fillText(line, padding, padding + index * lineHeight);
-        });
+  finalCtx.fillText(line, padding, padding + index * actualLineHeight);
+});
+
 
         const now = new Date();
         const timestamp = `${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}-${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}`;
@@ -160,7 +161,7 @@
   .witch-font-converter {
     margin-bottom: 2rem;
     margin-top: 5rem;
-    background: #2d133b;
+    background: #442C45;
     color: black;
     border-radius: 10px;
     padding: 1.5rem;

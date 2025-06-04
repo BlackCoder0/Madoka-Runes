@@ -87,9 +87,9 @@
   }
 
   @font-face {
-    font-family: 'MadokaRunes-2.0';
-    src: url('/ttf/MadokaRunes-2.0.ttf');
-  }
+  font-family: 'MadokaRunes2';
+  src: url('/ttf/MadokaRunes-2.0.ttf') format('truetype');
+}
 
   @font-face {
     font-family: 'nkf10_magicum_comicum_crassum';
@@ -251,7 +251,7 @@
 
   body {
     background: linear-gradient(135deg, #1a0e23 0%, #2d133b 100%);
-    font-family: 'MadokaLetters', 'MadokaMusical', 'MadokaRunes', 'nkf10_magicum_comicum_crassum', 'nkf11_magicum_texturae', Arial, sans-serif;
+    font-family: 'MadokaRunes-2.0','MadokaLetters', 'MadokaMusical',  'nkf10_magicum_comicum_crassum', 'nkf11_magicum_texturae', Arial, sans-serif;
     margin: 0;
     padding: 0;
     color: #f3e6fa;

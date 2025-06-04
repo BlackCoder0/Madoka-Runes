@@ -60,7 +60,7 @@
   const fontMap = [
     {
       label: '古代体',
-      font: 'MadokaRunes',
+      font: 'MadokaRunes2',
       key: 'ancient',
       sections: [
         { header: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'], characters: 'ABCDEFGHIJ' },
@@ -71,12 +71,12 @@
     },
     {
       label: '现代体',
-      font: 'MadokaRunes',
+      font: 'MadokaRunes2',
       key: 'modern',
       sections: [
-        { header: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'], characters: 'ABCDE/GHIJ' },
-        { header: ['K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'], characters: 'KLMNOP/RST' },
-        { header: ['U', 'V', 'W', 'X', 'Y', 'Z', 'Ä', 'Ö', 'Ü', 'ß'], characters: 'U/////ÄÖÜß' },
+        { header: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'], characters: 'ABCDEFGHIJ' },
+        { header: ['K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'], characters: 'KLMNOPQRST' },
+        { header: ['U', 'V', 'W', 'X', 'Y', 'Z', 'Ä', 'Ö', 'Ü', 'ß'], characters: 'U/W/YZÄÖÜß' },
         { header: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'], characters: '0123456789' }
       ]
     },

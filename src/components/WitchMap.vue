@@ -329,7 +329,7 @@
 
           .replace(/(TV第\d+集)/g, '<span style="font-family:Times New Roman">$1</span>')
           .replace(/(TV|CD)/g, '<span style="font-family:Times New Roman">$1</span>')
-          .replace(/(◈[^<]*)/g, '<span style="font-family:MadokaRunes;color:#b85c00;font-weight:bold;">$1</span>')
+          .replace(/(◈[^<]*)/g, '<span style="font-family:MadokaRunes2;color:#b85c00;font-weight:bold;">$1</span>')
           .replace(/(※[^<]*)/g, '<span style="color:#1976d2;font-weight:bold;">$1</span>')
           .replace(/(【[^】]+】)/g, '<span style="color:#d81b60;font-family:Times New Roman">$1</span>');
       },

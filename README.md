@@ -33,7 +33,7 @@ Madoka-Runes 是一个基于《魔法少女小圆》背景的项目。主要功�
   <img src="public/readme/看板娘.png" style="width: 30%; max-width: 500px;">
 </div>
 <br><br>
-本页面的古代文/现代文字体使用的是 MadokaRunes（2.0属实不知道怎么用），部分字符有缺失。
+自2025/06/04起，本页面的古代文/现代文字体使用 MadokaRunes-2.0。
 
 
 ## 技术相关
