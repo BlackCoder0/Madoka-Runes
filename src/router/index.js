@@ -1,8 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 // ⬆️ 改为 createWebHashHistory
 
-import WitchFontAllTable from '../components/WitchFontAllTable.vue';
-import WitchFontConverter from '../components/WitchFontConverter.vue';
+import WitchFontTable from '../components/WitchFontTable.vue';
+import WitchFontWorkbenchResponsive from '../components/WitchFontWorkbenchResponsive.vue';
 import WitchMap from '../components/WitchMap.vue';
 import About from '../components/About.vue';
 
@@ -10,13 +10,13 @@ const routes = [
   {
     path: '/',
     name: 'FontAllTable',
-    component: WitchFontAllTable,
+    component: WitchFontTable,
     meta: { backgroundImage: '555.png', backgroundSize: 'cover' }
   },
   {
     path: '/convert',
     name: 'FontConverter',
-    component: WitchFontConverter,
+    component: WitchFontWorkbenchResponsive,
     meta: { backgroundImage: 'mqdefault.jpg', backgroundSize: 'cover' }
   },
   {

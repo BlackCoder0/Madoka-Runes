@@ -40,7 +40,6 @@
           document.body.style.backgroundRepeat = 'no-repeat';
           document.body.style.backgroundPosition = 'center center';
           document.body.style.minHeight = '100vh';
-          document.body.style.width = '100vw';
         } else {
           // 如果当前路由没有设置背景图，则清除body上的背景样式
           document.body.style.backgroundImage = '';
@@ -48,7 +47,6 @@
           document.body.style.backgroundRepeat = '';
           document.body.style.backgroundPosition = '';
           document.body.style.minHeight = '';
-          document.body.style.width = '';
         }
       }
     },
@@ -65,7 +63,6 @@
       document.body.style.backgroundRepeat = '';
       document.body.style.backgroundPosition = '';
       document.body.style.minHeight = '';
-      document.body.style.width = '';
     }
   }
 </script>
