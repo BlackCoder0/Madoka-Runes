@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 // ⬆️ 改为 createWebHashHistory
 
 import WitchFontTable from '../components/WitchFontTable.vue';
-import WitchFontWorkbenchResponsive from '../components/WitchFontWorkbenchResponsive.vue';
+import WitchFontWorkbenchResponsive from '../components/WitchFontWorkbenchResponsiveClean.vue';
 import WitchMap from '../components/WitchMap.vue';
 import About from '../components/About.vue';
 

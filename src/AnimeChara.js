@@ -111,6 +111,35 @@ function showMessage(a, b) {
     $("#message").fadeOut(b);
 }
 
+function toLocalDateOnly(date) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function getCalendarDateDiff(fromDate, toDate) {
+    const start = toLocalDateOnly(fromDate);
+    const end = toLocalDateOnly(toDate);
+    const isPast = end.getTime() >= start.getTime();
+
+    const earlier = isPast ? start : end;
+    const later = isPast ? end : start;
+
+    let years = later.getFullYear() - earlier.getFullYear();
+    let months = later.getMonth() - earlier.getMonth();
+    let days = later.getDate() - earlier.getDate();
+
+    if (days < 0) {
+        months -= 1;
+        days += new Date(later.getFullYear(), later.getMonth(), 0).getDate();
+    }
+
+    if (months < 0) {
+        years -= 1;
+        months += 12;
+    }
+
+    return { isPast, years, months, days };
+}
+
 function randchat(b) {
     if (b == null) {
         let currentImage = $('.chara').css('background-image'); 
@@ -124,6 +153,7 @@ function randchat(b) {
         const events = [
             { name: '魔法少女小圆上映', date: new Date('2011-01-07') },
             { name: '叛逆的物语上映', date: new Date('2013-10-26') },
+            { name: '魔女之夜的回天上映', date: new Date('2026-08-28') },
             // 添加更多事件...
         ];
 
@@ -142,7 +172,15 @@ function randchat(b) {
         });
 
         const combinedTimeElapsedMsg = timeElapsedMsgs.join('<br>'); // 使用逗号连接多个事件的时间信息
-        allMsgs.push(combinedTimeElapsedMsg);
+        timeElapsedMsgs = events.map((event) => {
+            const { isPast, years, months, days } = getCalendarDateDiff(event.date, currentDate);
+            return isPast
+                ? `距离${event.name}已经过去${years}年${months}月${days}日`
+                : `距离${event.name}还有${years}年${months}月${days}日`;
+        });
+
+        const combinedTimeElapsedMsgFixed = timeElapsedMsgs.join('<br>');
+        allMsgs.push(combinedTimeElapsedMsgFixed);
 
         if (allMsgs.length > 0) {
             const randomIndex = Math.floor(Math.random() * allMsgs.length);

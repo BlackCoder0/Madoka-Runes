@@ -27,7 +27,7 @@
         <article class="card form-card">
           <div class="card-head">
             <span class="section-chip">正向转换</span>
-            <h2>输入普通字符，生成魔女文</h2>
+            <h2>输入原文，实时生成魔女文</h2>
           </div>
 
           <div class="field-grid">
@@ -74,8 +74,12 @@
           </div>
 
           <div class="action-row">
-            <button type="button" class="primary-button" @click="renderCanvasAndDownload">下载截图</button>
-            <span class="inline-tip">古代体和现代体分别对应大写与小写字形。</span>
+            <button type="button" class="primary-button" @click="renderCanvasAndDownload">
+              下载截图
+            </button>
+            <span class="inline-tip">
+              古代体与现代体分别对应大写与小写字形，实时预览仅增强显示对比，不影响导出颜色。
+            </span>
           </div>
         </article>
 
@@ -109,20 +113,20 @@
       <div class="panel-grid translate-grid">
         <div class="translate-side">
           <article class="card translate-control-card">
-            <div class="card-head card-head-inline">
-              <span class="section-chip">反向翻译</span>
+            <div class="card-head">
+              <span class="section-chip">反向转换</span>
               <h2>点击字表录入魔女文</h2>
             </div>
 
             <div class="translate-meta">
               <div class="meta-pill">
                 最近录入字体
-                <strong>{{ translationFont.label }}</strong>
+                <strong>{{ translationFontLabel }}</strong>
               </div>
               <div class="meta-pill">已录入 {{ translationEntries.length }} 个片段</div>
             </div>
 
-            <div class="tool-strip" role="toolbar" aria-label="反向转换工具条">
+            <div class="tool-strip" role="toolbar" aria-label="反向转换工具栏">
               <button type="button" class="ghost-button" @click="insertSpace">空格</button>
               <button type="button" class="ghost-button" @click="insertLineBreak">换行</button>
               <button type="button" class="primary-button" @click="removeLastTranslationChar">删除</button>
@@ -131,7 +135,7 @@
           </article>
 
           <article class="card result-card">
-            <div class="card-head card-head-inline">
+            <div class="card-head">
               <span class="section-chip muted-chip">魔女文</span>
               <h2>当前录入内容</h2>
             </div>
@@ -154,14 +158,27 @@
                   </span>
                 </template>
               </div>
-              <div v-else class="empty-rune-output">点击字表中的魔女文字符后，会显示在这里</div>
+              <div v-else class="empty-rune-output">
+                点击字表中的魔女文字后，会显示在这里。
+              </div>
             </div>
           </article>
 
           <article class="card result-card">
-            <div class="card-head">
-              <span class="section-chip muted-chip">译文</span>
-              <h2>翻译结果</h2>
+            <div class="card-head card-head-inline">
+              <div class="card-head-copy">
+                <span class="section-chip muted-chip">译文</span>
+                <h2>翻译结果</h2>
+              </div>
+              <button
+                type="button"
+                class="mini-copy-button"
+                :disabled="!translatedText"
+                :aria-label="copyButtonLabel"
+                @click="copyTranslatedText"
+              >
+                {{ copyButtonLabel }}
+              </button>
             </div>
 
             <div class="result-stage">
@@ -176,7 +193,7 @@
               <span class="section-chip muted-chip">字表</span>
               <h2>点击录入</h2>
             </div>
-            <p class="lookup-note">点击任意魔女文字符即可录入并翻译</p>
+            <p class="lookup-note">点击任意魔女文字即可录入并翻译，支持混合字体、空格和换行。</p>
           </div>
 
           <div class="table-shell">
@@ -197,7 +214,7 @@
 
 <script>
 import WitchFontTable from './WitchFontTable.vue';
-import { createFontLookup, getWitchFontByKey } from '../constants/witchFontMap';
+import { createFontLookup } from '../constants/witchFontMap';
 
 const converterFonts = [
   { key: 'ancient', label: '古代体', cssName: 'MadokaRunes2' },
@@ -210,12 +227,12 @@ const converterFonts = [
 
 const fixedColors = [
   { name: '黑色', value: '#000000' },
+  { name: '白色', value: '#ffffff' },
   { name: '粉色', value: '#ff99cc' },
   { name: '晓美焰紫', value: '#935ba5' },
   { name: '巴麻美黄', value: '#f4de90' },
   { name: '沙耶香蓝', value: '#0059d6' },
-  { name: '杏子红', value: '#e60000' },
-  { name: '白色', value: '#ffffff' }
+  { name: '杏子红', value: '#e60000' }
 ];
 
 const tabs = [
@@ -224,7 +241,7 @@ const tabs = [
 ];
 
 export default {
-  name: 'WitchFontWorkbenchResponsive',
+  name: 'WitchFontWorkbenchResponsiveClean',
   components: {
     WitchFontTable
   },
@@ -240,7 +257,10 @@ export default {
       fontSize: 32,
       translationEntries: [],
       translationFontKey: 'ancient',
-      translationFontSize: 30
+      translationFontSize: 30,
+      copyFeedback: '',
+      copyFeedbackTimer: null,
+      jscolorInstance: null
     };
   },
   computed: {
@@ -258,11 +278,11 @@ export default {
 
       return this.inputText;
     },
-    translationFont() {
-      return getWitchFontByKey(this.translationFontKey);
-    },
     hasTranslationEntries() {
       return this.translationEntries.length > 0;
+    },
+    translationFontLabel() {
+      return this.converterFonts.find((font) => font.key === this.translationFontKey)?.label ?? '未知字体';
     },
     translatedText() {
       const lookups = new Map();
@@ -284,6 +304,13 @@ export default {
           return lookups.get(entry.fontKey).get(entry.runeChar) ?? entry.runeChar;
         })
         .join('');
+    },
+    copyButtonLabel() {
+      if (!this.translatedText) {
+        return '复制';
+      }
+
+      return this.copyFeedback || '复制';
     }
   },
   watch: {
@@ -291,6 +318,9 @@ export default {
       if (this.jscolorInstance) {
         this.jscolorInstance.fromString(newVal);
       }
+    },
+    translatedText() {
+      this.resetCopyFeedback();
     }
   },
   methods: {
@@ -315,6 +345,48 @@ export default {
     },
     removeLastTranslationChar() {
       this.translationEntries = this.translationEntries.slice(0, -1);
+    },
+    resetCopyFeedback() {
+      if (this.copyFeedbackTimer) {
+        clearTimeout(this.copyFeedbackTimer);
+      }
+
+      this.copyFeedback = '';
+      this.copyFeedbackTimer = null;
+    },
+    showCopyFeedback(text) {
+      this.resetCopyFeedback();
+      this.copyFeedback = text;
+      this.copyFeedbackTimer = window.setTimeout(() => {
+        this.copyFeedback = '';
+        this.copyFeedbackTimer = null;
+      }, 1800);
+    },
+    async copyTranslatedText() {
+      if (!this.translatedText) {
+        return;
+      }
+
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(this.translatedText);
+        } else {
+          const helper = document.createElement('textarea');
+          helper.value = this.translatedText;
+          helper.setAttribute('readonly', '');
+          helper.style.position = 'fixed';
+          helper.style.opacity = '0';
+          helper.style.pointerEvents = 'none';
+          document.body.appendChild(helper);
+          helper.select();
+          document.execCommand('copy');
+          document.body.removeChild(helper);
+        }
+
+        this.showCopyFeedback('已复制');
+      } catch (error) {
+        this.showCopyFeedback('复制失败');
+      }
     },
     renderCanvasAndDownload() {
       const text = this.displayText;
@@ -364,6 +436,9 @@ export default {
         this.jscolorInstance = new window.jscolor(this.$refs.colorPicker);
       }
     });
+  },
+  beforeUnmount() {
+    this.resetCopyFeedback();
   }
 };
 </script>
@@ -393,7 +468,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(2, minmax(18rem, 1fr));
   gap: 0.55rem;
-  width: min(100%, 52rem);
+  width: min(100%, 56rem);
   margin: 0 auto;
 }
 
@@ -402,15 +477,15 @@ export default {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.82rem 1.4rem;
+  padding: 0.82rem 1.6rem;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.04);
   color: var(--text-muted);
   text-align: center;
   cursor: pointer;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
     0 6px 18px rgba(7, 3, 12, 0.14);
   backdrop-filter: blur(10px);
   transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
@@ -418,21 +493,22 @@ export default {
 
 .tab-button:hover {
   color: var(--text-main);
-  border-color: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.26);
 }
 
 .tab-button.active {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.36);
   color: var(--text-main);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    0 8px 22px rgba(7, 3, 12, 0.18);
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 10px 22px rgba(7, 3, 12, 0.2);
 }
 
 .tab-button:focus-visible,
 .primary-button:focus-visible,
-.ghost-button:focus-visible {
+.ghost-button:focus-visible,
+.mini-copy-button:focus-visible {
   outline: 2px solid #ffd4ec;
   outline-offset: 3px;
 }
@@ -460,11 +536,11 @@ export default {
 }
 
 .convert-grid {
-  grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.75fr);
+  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.75fr);
 }
 
 .translate-grid {
-  grid-template-columns: minmax(320px, 0.74fr) minmax(0, 1.26fr);
+  grid-template-columns: minmax(340px, 0.8fr) minmax(0, 1.2fr);
   align-items: start;
 }
 
@@ -488,6 +564,20 @@ export default {
   flex-direction: column;
   gap: 0.45rem;
   margin-bottom: 1rem;
+}
+
+.card-head-inline {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+
+.card-head-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-width: 0;
 }
 
 .card-head h2 {
@@ -616,8 +706,34 @@ textarea {
 }
 
 .primary-button:hover,
-.ghost-button:hover {
+.ghost-button:hover,
+.mini-copy-button:hover:not(:disabled) {
   transform: translateY(-1px);
+}
+
+.mini-copy-button {
+  flex: 0 0 auto;
+  min-height: 2rem;
+  padding: 0.34rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-soft);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 0.84rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.mini-copy-button:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.28);
+  color: var(--text-main);
+}
+
+.mini-copy-button:disabled {
+  opacity: 0.52;
+  cursor: not-allowed;
 }
 
 .inline-tip {
@@ -670,6 +786,10 @@ textarea {
     radial-gradient(circle at top right, rgba(255, 255, 255, 0.8), transparent 34%),
     radial-gradient(circle at bottom left, rgba(80, 60, 106, 0.14), transparent 42%);
   pointer-events: none;
+}
+
+.result-stage {
+  background: rgba(10, 6, 18, 0.34);
 }
 
 .preview-output,
@@ -804,10 +924,6 @@ textarea {
   .action-row .primary-button {
     width: 100%;
   }
-
-  .inline-tip {
-    display: block;
-  }
 }
 
 @media (max-width: 700px) {
@@ -815,10 +931,6 @@ textarea {
     width: calc(100vw - 0.75rem);
     max-width: calc(100vw - 0.75rem);
     margin-top: 13.2rem;
-  }
-
-  .panel-shell {
-    padding: 0.95rem;
   }
 
   .tool-tabs {
@@ -831,37 +943,19 @@ textarea {
     border-radius: 22px;
   }
 
+  .panel-shell {
+    padding: 0.95rem;
+  }
+
   .card {
     padding: 0.9rem;
   }
 
-  .convert-grid,
-  .translate-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .preview-card {
-    order: 2;
-  }
-
-  .form-card {
-    order: 1;
-  }
-
   .translate-side {
-    order: 2;
     grid-template-rows: auto auto auto;
   }
 
-  .lookup-card {
-    order: 1;
-  }
-
-  .card-head h2 {
-    font-size: 1.12rem;
-  }
-
-  .field-grid {
+  .color-row {
     grid-template-columns: 1fr;
   }
 
@@ -869,12 +963,8 @@ textarea {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .color-row {
-    grid-template-columns: 1fr;
-  }
-
-  .field-label {
-    font-size: 0.92rem;
+  .card-head h2 {
+    font-size: 1.12rem;
   }
 
   textarea,
@@ -934,8 +1024,13 @@ textarea {
     border-radius: 18px;
   }
 
-  .tool-strip {
-    grid-template-columns: 1fr 1fr;
+  .card-head-inline {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mini-copy-button {
+    align-self: flex-start;
   }
 
   .primary-button,
